@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.ui.theme
+package com.prmto.socialnetwork_philiplackner.presentation.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

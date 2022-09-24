@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.ui.theme
+package com.prmto.socialnetwork_philiplackner.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
