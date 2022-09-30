@@ -1,6 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.presentation.login
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -31,9 +32,10 @@ fun LoginScreen(
 ) {
 
     Box(
-        modifier = modifier.semantics {
-            contentDescription = Screen.LoginScreen.route
-        }
+        modifier = modifier
+            .semantics {
+                contentDescription = Screen.LoginScreen.route
+            }
             .fillMaxSize()
             .padding(
                 start = SpaceLarge,
@@ -60,6 +62,7 @@ fun LoginScreen(
                 onValueChange = {
                     loginViewModel.setUserNameText(it)
                 },
+                error = loginViewModel.usernameError.value,
                 hint = stringResource(id = R.string.login_hint)
             )
 
@@ -72,7 +75,23 @@ fun LoginScreen(
                 },
                 hint = stringResource(id = R.string.password_hint),
                 keyboardType = KeyboardType.Password,
+                error = loginViewModel.passwordError.value,
+                showPasswordVisible = loginViewModel.showPassword.value,
+                onPasswordToggleClick = {
+                    loginViewModel.setShowPassword(it)
+                }
             )
+            Spacer(modifier = Modifier.height(SpaceMedium))
+
+            Button(
+                onClick = { },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.login),
+                    color = MaterialTheme.colors.onPrimary
+                )
+            }
         }
 
         Text(

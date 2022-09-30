@@ -39,10 +39,7 @@ class StandardTextFieldTest {
                     onValueChange = {
                         text = it
                     },
-                    maxLength = 5,
-                    modifier = Modifier.semantics {
-                        testTag = STANDARD_TEXT_FIELD
-                    }
+                    maxLength = 5
                 )
             }
         }
