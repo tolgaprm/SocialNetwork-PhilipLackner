@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.presentation.login
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -84,7 +85,9 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(SpaceMedium))
 
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate(Screen.MainFeedScreen.route)
+                },
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Text(
@@ -109,7 +112,11 @@ fun LoginScreen(
 
             },
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .clickable {
+                    navController.navigate(Screen.RegisterScreen.route)
+                }
         )
     }
 

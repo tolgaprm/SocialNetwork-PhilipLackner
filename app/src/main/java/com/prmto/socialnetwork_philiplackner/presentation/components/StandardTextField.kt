@@ -77,7 +77,7 @@ fun StandardTextField(
                             imageVector = if (showPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
                             tint = Color.White,
                             contentDescription = if (showPasswordVisible) {
-                                stringResource(id = R.string.password_visibe_content_description)
+                                stringResource(id = R.string.password_visible_content_description)
                             } else {
                                 stringResource(id = R.string.password_hidden_content_description)
                             }
