@@ -8,11 +8,15 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.prmto.socialnetwork_philiplackner.R
+import com.prmto.socialnetwork_philiplackner.presentation.util.TestTags
 
 @Composable
 fun StandardTextField(
@@ -54,11 +58,17 @@ fun StandardTextField(
         visualTransformation = if (isPasswordVisible && isPasswordToggleDisplayed) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = {
             if (isPasswordToggleDisplayed) {
-                IconButton(onClick = {
-                    isPasswordVisible = !isPasswordVisible
-                }) {
+                IconButton(
+                    onClick = {
+                        isPasswordVisible = !isPasswordVisible
+                    },
+                    modifier = Modifier.semantics {
+                        testTag = TestTags.PASSWORD_TOGGLE
+                    }
+                ) {
                     Icon(
                         imageVector = if (isPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility,
+                        tint = Color.White,
                         contentDescription = if (isPasswordVisible) {
                             stringResource(id = R.string.password_visibe_content_description)
                         } else {

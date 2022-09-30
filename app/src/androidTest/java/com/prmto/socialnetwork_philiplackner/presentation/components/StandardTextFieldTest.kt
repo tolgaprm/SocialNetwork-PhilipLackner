@@ -9,11 +9,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
-import org.junit.Before
+import com.prmto.socialnetwork_philiplackner.presentation.util.TestTags.STANDARD_TEXT_FIELD
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,8 +28,8 @@ class StandardTextFieldTest {
     val composeTestRule = createComposeRule()
 
 
-    @Before
-    fun setUp() {
+    @Test
+    fun enterTooLongString_maxLengthNotExceeded() {
         composeTestRule.setContent {
             var text by remember { mutableStateOf("") }
 
@@ -39,21 +41,51 @@ class StandardTextFieldTest {
                     },
                     maxLength = 5,
                     modifier = Modifier.semantics {
-                        testTag = ""
+                        testTag = STANDARD_TEXT_FIELD
                     }
                 )
             }
         }
+        val expectedString = "aaaaa"
+
+        composeTestRule.onNodeWithTag(STANDARD_TEXT_FIELD)
+            .performTextClearance()
+
+        composeTestRule.onNodeWithTag(STANDARD_TEXT_FIELD)
+            .performTextInput(expectedString)
+
+        composeTestRule.onNodeWithTag(STANDARD_TEXT_FIELD)
+            .performTextInput("a")
+
+        composeTestRule.onNodeWithTag(STANDARD_TEXT_FIELD)
+            .assertTextEquals(expectedString)
+
     }
 
     @Test
-    fun enterTooLongString_maxLengthNotExceeded() {
-        composeTestRule.onNodeWithText("test")
-            .performTextInput("123456")
+    fun enterPassword_toggleVisibility_passwordVisible() {
+        composeTestRule.setContent {
+            var text by remember { mutableStateOf("") }
 
-        composeTestRule.onNodeWithText("test")
-            .assertTextEquals("12345")
+            SocialNetworkPhilipLacknerTheme {
+                StandardTextField(
+                    text = text,
+                    onValueChange = {
+                        text = it
+                    },
+                    keyboardType = KeyboardType.Password,
+                    maxLength = 5,
+                    modifier = Modifier.semantics {
+                        testTag = STANDARD_TEXT_FIELD
+                    }
+                )
+            }
 
+            composeTestRule.onNodeWithTag(STANDARD_TEXT_FIELD)
+                .performTextInput("aaaaa")
+
+
+        }
     }
 
 }

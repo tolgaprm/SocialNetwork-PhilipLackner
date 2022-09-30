@@ -3,12 +3,17 @@ package com.prmto.socialnetwork_philiplackner.presentation.splash
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
+import com.prmto.socialnetwork_philiplackner.presentation.util.Navigation
 import com.prmto.socialnetwork_philiplackner.presentation.util.Screen
-import junit.framework.TestCase.assertEquals
+import com.prmto.socialnetwork_philiplackner.util.Constants
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -42,6 +47,6 @@ class SplashScreenTest {
         composeTestRule
             .onNodeWithContentDescription("Logo")
             .assertExists()
-        
+
     }
 }

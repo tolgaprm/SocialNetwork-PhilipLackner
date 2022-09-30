@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,15 +21,19 @@ import com.prmto.socialnetwork_philiplackner.presentation.components.StandardTex
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.presentation.util.Screen
 
 @Composable
 fun LoginScreen(
+    modifier: Modifier = Modifier,
     navController: NavController,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
 
     Box(
-        modifier = Modifier
+        modifier = modifier.semantics {
+            contentDescription = Screen.LoginScreen.route
+        }
             .fillMaxSize()
             .padding(
                 start = SpaceLarge,
