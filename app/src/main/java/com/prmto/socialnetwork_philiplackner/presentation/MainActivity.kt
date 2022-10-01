@@ -40,7 +40,10 @@ class MainActivity : ComponentActivity() {
                         ).any {
                             currentDestination?.route == it
                         },
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        onFabClick = {
+                            navController.navigate(Screen.CreatePostScreen.route)
+                        }
                     ) {
                         Navigation(navController)
                     }

@@ -1,13 +1,12 @@
 package com.prmto.socialnetwork_philiplackner.presentation.util
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.prmto.socialnetwork_philiplackner.presentation.activity.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.presentation.chat.ChatScreen
+import com.prmto.socialnetwork_philiplackner.presentation.create_post.CreatePostScreen
 import com.prmto.socialnetwork_philiplackner.presentation.login.LoginScreen
 import com.prmto.socialnetwork_philiplackner.presentation.main_feed_screen.MainFeedScreen
 import com.prmto.socialnetwork_philiplackner.presentation.profile.ProfileScreen
@@ -46,6 +45,9 @@ fun Navigation(navController: NavHostController) {
 
         composable(Screen.ProfileScreen.route) {
             ProfileScreen(navController = navController)
+        }
+        composable(Screen.CreatePostScreen.route) {
+            CreatePostScreen(navController = navController)
         }
     }
 }

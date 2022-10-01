@@ -1,5 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.presentation.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -8,6 +10,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,9 +29,9 @@ import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceSmall
 @Composable
 @Throws(IllegalArgumentException::class)
 fun RowScope.StandardBottomNavItem(
-    icon: ImageVector,
-    contentDescription: String? = null,
     modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    contentDescription: String? = null,
     selected: Boolean = false,
     alertCount: Int? = null,
     selectedColor: Color = MaterialTheme.colors.primary,
@@ -40,6 +43,13 @@ fun RowScope.StandardBottomNavItem(
     if (alertCount != null && alertCount < 0) {
         throw IllegalArgumentException("Alert count can't negative")
     }
+
+    val lineLength by animateFloatAsState(
+        targetValue = if (selected) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 300
+        )
+    )
 
     BottomNavigationItem(
         selected = selected,
@@ -57,19 +67,27 @@ fun RowScope.StandardBottomNavItem(
                         if (selected) {
                             drawLine(
                                 color = selectedColor,
-                                start = Offset(size.width / 2f - 15.dp.toPx(), size.height),
-                                end = Offset(size.width / 2f + 15.dp.toPx(), size.height),
+                                start = Offset(
+                                    size.width / 2f - lineLength * 15.dp.toPx(),
+                                    size.height
+                                ),
+                                end = Offset(
+                                    size.width / 2f + lineLength * 15.dp.toPx(),
+                                    size.height
+                                ),
                                 strokeWidth = 2.dp.toPx(),
                                 cap = StrokeCap.Round
                             )
                         }
                     }
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = contentDescription,
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = contentDescription,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
                 if (alertCount != null) {
                     val alertText = if (alertCount > 99) {
