@@ -1,12 +1,16 @@
 package com.prmto.socialnetwork_philiplackner.presentation.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Message
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +25,10 @@ fun StandardScaffold(
     navController: NavController,
     modifier: Modifier = Modifier,
     showBottomBar: Boolean = true,
+    showToolBar: Boolean = true,
+    showBackArrow: Boolean = true,
+    toolbarTitle: String? = null,
+    navActions: @Composable RowScope.() -> Unit = {},
     bottomNavItems: List<BottomNavItem> = listOf(
         BottomNavItem(
             route = Screen.MainFeedScreen.route,
@@ -69,7 +77,7 @@ fun StandardScaffold(
                                 alertCount = bottomNavItem.alertCount,
                                 enabled = bottomNavItem.icon != null
                             ) {
-                                if(navController.currentDestination?.route != bottomNavItem.route){
+                                if (navController.currentDestination?.route != bottomNavItem.route) {
                                     navController.navigate(bottomNavItem.route)
                                 }
                             }

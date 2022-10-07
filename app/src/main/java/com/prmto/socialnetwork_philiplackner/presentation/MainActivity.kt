@@ -8,8 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.presentation.components.StandardScaffold
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
 import com.prmto.socialnetwork_philiplackner.presentation.util.Navigation
@@ -37,6 +39,16 @@ class MainActivity : ComponentActivity() {
                             Screen.ChatScreen.route,
                             Screen.ActivityScreen.route,
                             Screen.ProfileScreen.route
+                        ).any {
+                            currentDestination?.route == it
+                        },
+                        showBackArrow = listOf(
+                            Screen.PostDetailScreen.route,
+                            Screen.MessagesScreen.route,
+                            Screen.EditProfileScreen.route,
+                            Screen.SearchScreen.route,
+                            Screen.CreatePostScreen.route,
+                            Screen.PersonListScreen.route
                         ).any {
                             currentDestination?.route == it
                         },

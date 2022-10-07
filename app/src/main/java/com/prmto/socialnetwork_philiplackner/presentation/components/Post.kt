@@ -42,7 +42,7 @@ import com.prmto.socialnetwork_philiplackner.util.Constants.MAX_POST_DESCRIPTION
 @Composable
 fun Post(
     post: Post,
-    profilePictureSize: Dp = 75.dp
+    onPostClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -52,10 +52,13 @@ fun Post(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = profilePictureSize / 2f)
+                .offset(y = ProfilePictureSize / 2f)
                 .clip(MaterialTheme.shapes.medium)
                 .shadow(5.dp)
                 .background(MediumGray)
+                .clickable {
+                    onPostClick()
+                }
         ) {
             Image(
                 modifier = Modifier
@@ -70,7 +73,7 @@ fun Post(
                     .padding(SpaceMedium)
             ) {
                 ActionRow(
-                    username = "Philipp Lackner",
+                    username = post.username,
                     modifier = Modifier.fillMaxWidth(),
                     onLikeClick = { isLiked ->
 
@@ -136,10 +139,10 @@ fun Post(
         }
         Image(
             painterResource(id = R.drawable.avatar),
-            contentDescription = "Profile picture",
+            contentDescription = stringResource(id = R.string.profile_picture),
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(profilePictureSize)
+                .size(ProfilePictureSize)
                 .clip(CircleShape)
                 .align(Alignment.TopCenter)
         )

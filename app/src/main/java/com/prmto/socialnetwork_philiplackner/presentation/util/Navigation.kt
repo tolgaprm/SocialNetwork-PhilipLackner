@@ -4,11 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.prmto.socialnetwork_philiplackner.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.presentation.activity.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.presentation.chat.ChatScreen
 import com.prmto.socialnetwork_philiplackner.presentation.create_post.CreatePostScreen
 import com.prmto.socialnetwork_philiplackner.presentation.login.LoginScreen
 import com.prmto.socialnetwork_philiplackner.presentation.main_feed_screen.MainFeedScreen
+import com.prmto.socialnetwork_philiplackner.presentation.post_detail.PostDetailScreen
 import com.prmto.socialnetwork_philiplackner.presentation.profile.ProfileScreen
 import com.prmto.socialnetwork_philiplackner.presentation.register.RegisterScreen
 import com.prmto.socialnetwork_philiplackner.presentation.splash.SplashScreen
@@ -48,6 +50,20 @@ fun Navigation(navController: NavHostController) {
         }
         composable(Screen.CreatePostScreen.route) {
             CreatePostScreen(navController = navController)
+        }
+        composable(Screen.PostDetailScreen.route) {
+            PostDetailScreen(
+                navController = navController,
+                post = Post(
+                    username = "Tolga Pirim",
+                    imageUrl = "",
+                    description = "Lorem ipsum dolor sit amet, consetetur, asdfadsf" + "diam nonumy eirmod tempor invidunt ut fda fdsa" +
+                            "magna aliquyam erat, sed diam voluptua",
+                    profilePictureProfile = "",
+                    likeCount = 20,
+                    commentCount = 50
+                )
+            )
         }
     }
 }

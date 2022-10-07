@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="dark_gray">#FF202020</color>
+    <color name="medium_gray">#FF404040</color>
 </resources>
