@@ -42,17 +42,28 @@ import com.prmto.socialnetwork_philiplackner.util.Constants.MAX_POST_DESCRIPTION
 @Composable
 fun Post(
     post: Post,
+    showProfileImage: Boolean = true,
     onPostClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .offset(
+                y =
+                if (showProfileImage) {
+                    0.dp
+                } else -(ProfilePictureSizeLarge / 2f)
+            )
             .padding(SpaceMedium)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(y = ProfilePictureSize / 2f)
+                .offset(
+                    y = if (showProfileImage) {
+                        ProfilePictureSizeMedium / 2f
+                    } else 0.dp
+                )
                 .clip(MaterialTheme.shapes.medium)
                 .shadow(5.dp)
                 .background(MediumGray)
@@ -137,15 +148,19 @@ fun Post(
                 }
             }
         }
-        Image(
-            painterResource(id = R.drawable.avatar),
-            contentDescription = stringResource(id = R.string.profile_picture),
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(ProfilePictureSize)
-                .clip(CircleShape)
-                .align(Alignment.TopCenter)
-        )
+
+        if (showProfileImage) {
+            Image(
+                painterResource(id = R.drawable.avatar),
+                contentDescription = stringResource(id = R.string.profile_picture),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(ProfilePictureSizeMedium)
+                    .clip(CircleShape)
+                    .align(Alignment.TopCenter)
+            )
+        }
+
 
     }
 }

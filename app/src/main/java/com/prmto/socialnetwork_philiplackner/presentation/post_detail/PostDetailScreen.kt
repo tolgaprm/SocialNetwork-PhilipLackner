@@ -67,7 +67,7 @@ fun PostDetailScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .offset(y = ProfilePictureSize / 2f)
+                                .offset(y = ProfilePictureSizeMedium / 2f)
                                 .clip(MaterialTheme.shapes.medium)
                                 .background(MediumGray)
                         ) {
@@ -120,7 +120,7 @@ fun PostDetailScreen(
                             painterResource(id = R.drawable.avatar),
                             contentDescription = stringResource(id = R.string.profile_picture),
                             modifier = Modifier
-                                .size(ProfilePictureSize)
+                                .size(ProfilePictureSizeMedium)
                                 .clip(CircleShape)
                                 .align(Alignment.TopCenter),
                             contentScale = ContentScale.Crop

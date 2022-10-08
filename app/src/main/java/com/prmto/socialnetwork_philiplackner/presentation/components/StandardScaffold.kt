@@ -78,7 +78,9 @@ fun StandardScaffold(
                                 enabled = bottomNavItem.icon != null
                             ) {
                                 if (navController.currentDestination?.route != bottomNavItem.route) {
-                                    navController.navigate(bottomNavItem.route)
+                                    navController.navigate(bottomNavItem.route) {
+                                        launchSingleTop = true
+                                    }
                                 }
                             }
                         }
