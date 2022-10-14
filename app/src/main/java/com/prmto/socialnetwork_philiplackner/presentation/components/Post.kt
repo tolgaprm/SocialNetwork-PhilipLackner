@@ -48,12 +48,6 @@ fun Post(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .offset(
-                y =
-                if (showProfileImage) {
-                    0.dp
-                } else -(ProfilePictureSizeLarge / 2f)
-            )
             .padding(SpaceMedium)
     ) {
         Column(

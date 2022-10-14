@@ -1,9 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.presentation.profile.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -13,16 +10,12 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.domain.models.User
-import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.ProfilePictureSizeLarge
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SpaceSmall
@@ -36,24 +29,9 @@ fun ProfileHeaderSection(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .offset(y = -(ProfilePictureSizeLarge / 2f)),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.avatar),
-            contentDescription = stringResource(id = R.string.profile_picture),
-            modifier = Modifier
-                .size(ProfilePictureSizeLarge)
-                .clip(CircleShape)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.onSurface,
-                    shape = CircleShape
-                ),
-            contentScale = ContentScale.Crop
-        )
-
         Row(
             modifier = Modifier.offset(
                 x = if (isOwnProfile) {
