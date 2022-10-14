@@ -22,7 +22,8 @@ import com.prmto.socialnetwork_philiplackner.presentation.util.toPx
 @Composable
 fun BannerSection(
     modifier: Modifier = Modifier,
-    iconSize: Dp = 30.dp,
+    iconSize: Dp = 35.dp,
+    iconModifier: Modifier = Modifier,
     onGitHubClick: () -> Unit = {},
     onInstagramClick: () -> Unit = {},
     onLinkedinClick: () -> Unit = {},
@@ -57,7 +58,7 @@ fun BannerSection(
 
 
         Row(
-            modifier = Modifier
+            modifier = iconModifier
                 .height(iconSize)
                 .align(Alignment.BottomStart)
                 .padding(SpaceSmall)
@@ -81,7 +82,7 @@ fun BannerSection(
         }
 
         Row(
-            modifier = Modifier
+            modifier = iconModifier
                 .height(iconSize)
                 .align(Alignment.BottomEnd)
                 .padding(SpaceSmall)
