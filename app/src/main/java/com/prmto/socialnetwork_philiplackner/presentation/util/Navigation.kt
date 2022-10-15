@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.presentation.util
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,6 +9,7 @@ import com.prmto.socialnetwork_philiplackner.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.presentation.activity.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.presentation.chat.ChatScreen
 import com.prmto.socialnetwork_philiplackner.presentation.create_post.CreatePostScreen
+import com.prmto.socialnetwork_philiplackner.presentation.edit_profile.EditProfileScreen
 import com.prmto.socialnetwork_philiplackner.presentation.login.LoginScreen
 import com.prmto.socialnetwork_philiplackner.presentation.main_feed_screen.MainFeedScreen
 import com.prmto.socialnetwork_philiplackner.presentation.post_detail.PostDetailScreen
@@ -15,11 +17,12 @@ import com.prmto.socialnetwork_philiplackner.presentation.profile.ProfileScreen
 import com.prmto.socialnetwork_philiplackner.presentation.register.RegisterScreen
 import com.prmto.socialnetwork_philiplackner.presentation.splash.SplashScreen
 
+@ExperimentalMaterialApi
 @Composable
 fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.ProfileScreen.route
+        startDestination = Screen.EditProfileScreen.route
     ) {
         composable(Screen.SplashScreen.route) {
             SplashScreen(navController = navController)
@@ -64,6 +67,10 @@ fun Navigation(navController: NavHostController) {
                     commentCount = 50
                 )
             )
+        }
+
+        composable(Screen.EditProfileScreen.route) {
+            EditProfileScreen(navController = navController)
         }
     }
 }

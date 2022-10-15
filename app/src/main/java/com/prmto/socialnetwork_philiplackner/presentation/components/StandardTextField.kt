@@ -2,25 +2,26 @@ package com.prmto.socialnetwork_philiplackner.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import com.prmto.socialnetwork_philiplackner.R
+import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.IconSizeMedium
 import com.prmto.socialnetwork_philiplackner.presentation.util.TestTags
 
 @Composable
@@ -30,8 +31,14 @@ fun StandardTextField(
     hint: String = "",
     maxLength: Int = 40,
     error: String = "",
+    maxlines: Int = 1,
+    textStyle: TextStyle = TextStyle(
+        color = MaterialTheme.colors.onBackground
+    ),
+    singleLine: Boolean = true,
+    leadingIcon: ImageVector? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
-    isPasswordToggleDisplayed:Boolean =keyboardType == KeyboardType.Password,
+    isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
     showPasswordVisible: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {},
     onValueChange: (String) -> Unit
@@ -47,20 +54,34 @@ fun StandardTextField(
                     onValueChange(it)
                 }
             },
+
             placeholder = {
                 Text(
                     text = hint,
                     style = MaterialTheme.typography.body1
                 )
             },
+            maxLines = maxlines,
+            textStyle = textStyle,
             isError = error.isNotEmpty(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType
             ),
-            singleLine = true,
+            singleLine = singleLine,
             visualTransformation = if (showPasswordVisible && isPasswordToggleDisplayed) PasswordVisualTransformation() else VisualTransformation.None,
-            trailingIcon = {
-                if (isPasswordToggleDisplayed) {
+            leadingIcon = if (leadingIcon != null) {
+                {
+                    Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.size(IconSizeMedium)
+                    )
+                }
+
+            } else null,
+            trailingIcon = if (isPasswordToggleDisplayed) {
+                {
                     IconButton(
                         onClick = {
                             onPasswordToggleClick(!showPasswordVisible)
@@ -81,7 +102,7 @@ fun StandardTextField(
                     }
                 }
 
-            },
+            } else null,
             modifier = Modifier
                 .fillMaxWidth()
                 .semantics {

@@ -40,4 +40,11 @@
     <string name="following">Following</string>
     <string name="unfollow">Unfollow</string>
     <string name="follow">Follow</string>
+    <string name="edit_your_profile">Edit your profile</string>
+    <string name="github_profile_url">Github profile url</string>
+    <string name="instagram_profile_url">Instagram profile url</string>
+    <string name="linkedin_profile_url">Linkedin profile url</string>
+    <string name="your_bio">Your bio</string>
+    <string name="select_top_3_skills">" Select your top 3 skills:"</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

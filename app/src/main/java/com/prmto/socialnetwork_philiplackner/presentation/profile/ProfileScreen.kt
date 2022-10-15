@@ -7,7 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -22,8 +23,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.domain.models.Post
@@ -38,20 +41,23 @@ import com.prmto.socialnetwork_philiplackner.presentation.util.toPx
 
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    profilePictureSize: Dp = ProfilePictureSizeLarge,
+    viewModel: ProfileViewModel = hiltViewModel()
+) {
 
     val lazyListState = rememberLazyListState()
 
-    var toolbarOffsetY by remember {
-        mutableStateOf(0f)
-    }
+    var toolbarOffsetY = viewModel.toolbarOffsetY.value
+    var expandedAspectRatio = viewModel.expandedRatio.value
 
     val iconSizeExpanded = 35.dp
 
     val toolbarHeightCollapsed = 75.dp
 
     val imageCollapsedOffset = remember {
-        (toolbarHeightCollapsed - ProfilePictureSizeLarge / 2f) / 2f
+        (toolbarHeightCollapsed - profilePictureSize / 2f) / 2f
     }
 
     val iconCollapsedOffsetY = remember {
@@ -61,20 +67,15 @@ fun ProfileScreen(navController: NavController) {
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
 
     val iconHorizontalCenterLength = bannerHeight.toPx() / 2f -
-            (ProfilePictureSizeLarge / 2f).toPx() +
+            (profilePictureSize / 2f).toPx() +
             SpaceSmall.toPx()
 
     val toolbarHeightExpanded = remember {
-        bannerHeight + ProfilePictureSizeLarge
+        bannerHeight + profilePictureSize
     }
 
     val maxOffset = remember {
         toolbarHeightExpanded - toolbarHeightCollapsed
-    }
-
-
-    var expandedAspectRatio by remember {
-        mutableStateOf(1f)
     }
 
 
@@ -110,7 +111,7 @@ fun ProfileScreen(navController: NavController) {
             item {
                 Spacer(
                     modifier = Modifier.height(
-                        toolbarHeightExpanded - ProfilePictureSizeLarge / 2f
+                        toolbarHeightExpanded - profilePictureSize / 2f
                     )
                 )
             }
@@ -180,7 +181,7 @@ fun ProfileScreen(navController: NavController) {
                 modifier = Modifier
                     .align(CenterHorizontally)
                     .graphicsLayer {
-                        translationY = -ProfilePictureSizeLarge.toPx() / 2f -
+                        translationY = -profilePictureSize.toPx() / 2f -
                                 (1 - expandedAspectRatio) * imageCollapsedOffset.toPx()
                         transformOrigin = TransformOrigin(
                             pivotFractionX = 0.5f,
@@ -190,7 +191,7 @@ fun ProfileScreen(navController: NavController) {
                         scaleX = scale
                         scaleY = scale
                     }
-                    .size(ProfilePictureSizeLarge)
+                    .size(profilePictureSize)
                     .clip(CircleShape)
                     .border(
                         width = 1.dp,

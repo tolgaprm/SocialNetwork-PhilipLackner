@@ -25,8 +25,8 @@ fun StandardToolbar(
     TopAppBar(
         modifier = modifier,
         title = title,
-        navigationIcon = {
-            if (showBackArrow) {
+        navigationIcon = if (showBackArrow) {
+            {
                 IconButton(onClick = {
                     navController.navigateUp()
                 }) {
@@ -37,7 +37,8 @@ fun StandardToolbar(
                     )
                 }
             }
-        },
+
+        } else null,
         actions = navActions,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 5.dp
