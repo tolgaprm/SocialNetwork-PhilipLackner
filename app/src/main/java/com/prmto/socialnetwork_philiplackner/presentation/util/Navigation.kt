@@ -15,6 +15,7 @@ import com.prmto.socialnetwork_philiplackner.presentation.main_feed_screen.MainF
 import com.prmto.socialnetwork_philiplackner.presentation.post_detail.PostDetailScreen
 import com.prmto.socialnetwork_philiplackner.presentation.profile.ProfileScreen
 import com.prmto.socialnetwork_philiplackner.presentation.register.RegisterScreen
+import com.prmto.socialnetwork_philiplackner.presentation.search.SearchScreen
 import com.prmto.socialnetwork_philiplackner.presentation.splash.SplashScreen
 
 @ExperimentalMaterialApi
@@ -22,7 +23,7 @@ import com.prmto.socialnetwork_philiplackner.presentation.splash.SplashScreen
 fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.EditProfileScreen.route
+        startDestination = Screen.SearchScreen.route
     ) {
         composable(Screen.SplashScreen.route) {
             SplashScreen(navController = navController)
@@ -71,6 +72,10 @@ fun Navigation(navController: NavHostController) {
 
         composable(Screen.EditProfileScreen.route) {
             EditProfileScreen(navController = navController)
+        }
+
+        composable(Screen.SearchScreen.route) {
+            SearchScreen(navController = navController)
         }
     }
 }

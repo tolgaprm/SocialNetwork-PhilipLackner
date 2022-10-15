@@ -47,4 +47,6 @@
     <string name="your_bio">Your bio</string>
     <string name="select_top_3_skills">" Select your top 3 skills:"</string>
     <string name="save_changes">Save Changes</string>
+    <string name="search_for_users">Search for users</string>
+    <string name="search_hint">Search...</string>
 </resources>
