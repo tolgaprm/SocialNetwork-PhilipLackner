@@ -59,6 +59,11 @@ fun ProfileScreen(navController: NavController) {
     }
 
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
+
+    val iconHorizontalCenterLength = bannerHeight.toPx() / 2f -
+            (ProfilePictureSizeLarge / 2f).toPx() +
+            SpaceSmall.toPx()
+
     val toolbarHeightExpanded = remember {
         bannerHeight + ProfilePictureSizeLarge
     }
@@ -158,9 +163,15 @@ fun ProfileScreen(navController: NavController) {
                             maximumValue = bannerHeight
                         )
                     ),
-                iconModifier = Modifier.graphicsLayer {
+                leftIconModifier = Modifier.graphicsLayer {
                     translationY = (1f - expandedAspectRatio) *
                             -iconCollapsedOffsetY.toPx()
+                    translationX = (1f - expandedAspectRatio) * iconHorizontalCenterLength
+                },
+                rightIconModifier = Modifier.graphicsLayer {
+                    translationY = (1f - expandedAspectRatio) *
+                            -iconCollapsedOffsetY.toPx()
+                    translationX = (1f - expandedAspectRatio) * -iconHorizontalCenterLength
                 }
             )
             Image(
