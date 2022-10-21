@@ -23,7 +23,7 @@ import com.prmto.socialnetwork_philiplackner.presentation.splash.SplashScreen
 fun Navigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.SearchScreen.route
+        startDestination = Screen.LoginScreen.route
     ) {
         composable(Screen.SplashScreen.route) {
             SplashScreen(navController = navController)
