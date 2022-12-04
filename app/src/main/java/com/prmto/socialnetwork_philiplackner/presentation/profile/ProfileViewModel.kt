@@ -12,20 +12,19 @@ class ProfileViewModel @Inject constructor(
 
 ) : ViewModel() {
 
-    private val _toolbarOffsetY = mutableStateOf(0f)
-    val toolbarOffsetY:State<Float> = _toolbarOffsetY
+    private val _toolbarState = mutableStateOf(ProfileToolbarState())
+    val toolbarState: State<ProfileToolbarState> = _toolbarState
 
-    private val _expandedRatio = mutableStateOf(1f)
-    val expandedRatio:State<Float> = _expandedRatio
-
-
-
-    fun setExpandedRatio(ratio:Float) {
-        _expandedRatio.value = ratio
+    fun setExpandedRatio(ratio: Float) {
+        _toolbarState.value = _toolbarState.value.copy(
+            expandedRatio = ratio
+        )
     }
 
     fun setToolbarOffsetY(value: Float) {
-        _toolbarOffsetY.value = value
+        _toolbarState.value = _toolbarState.value.copy(
+            toolbarOffsetY = value
+        )
     }
 
 }

@@ -48,22 +48,15 @@ fun ProfileScreen(
 ) {
 
     val lazyListState = rememberLazyListState()
-
-    var toolbarOffsetY = viewModel.toolbarOffsetY.value
-    var expandedAspectRatio = viewModel.expandedRatio.value
-
+    val toolbarState = viewModel.toolbarState.value
     val iconSizeExpanded = 35.dp
-
     val toolbarHeightCollapsed = 75.dp
-
-    val imageCollapsedOffset = remember {
+    val imageCollapsedOffsetY = remember {
         (toolbarHeightCollapsed - profilePictureSize / 2f) / 2f
     }
-
     val iconCollapsedOffsetY = remember {
         (toolbarHeightCollapsed - iconSizeExpanded) / 2f
     }
-
     val bannerHeight = (LocalConfiguration.current.screenWidthDp / 2.5f).dp
 
     val iconHorizontalCenterLength = bannerHeight.toPx() / 2f -
@@ -73,7 +66,6 @@ fun ProfileScreen(
     val toolbarHeightExpanded = remember {
         bannerHeight + profilePictureSize
     }
-
     val maxOffset = remember {
         toolbarHeightExpanded - toolbarHeightCollapsed
     }
@@ -86,12 +78,14 @@ fun ProfileScreen(
                 if (delta > 0 && lazyListState.firstVisibleItemIndex != 0) {
                     return Offset.Zero
                 }
-                val newOffset = toolbarOffsetY + delta
-                toolbarOffsetY = newOffset.coerceIn(
-                    minimumValue = -maxOffset.toPx(),
-                    maximumValue = 0f
+                val newOffset = viewModel.toolbarState.value.toolbarOffsetY + delta
+                viewModel.setToolbarOffsetY(
+                    newOffset.coerceIn(
+                        minimumValue = -maxOffset.toPx(),
+                        maximumValue = 0f
+                    )
                 )
-                expandedAspectRatio = ((toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx())
+                viewModel.setExpandedRatio(((viewModel.toolbarState.value.toolbarOffsetY + maxOffset.toPx()) / maxOffset.toPx()))
                 return Offset.Zero
             }
         }
@@ -159,20 +153,20 @@ fun ProfileScreen(
             BannerSection(
                 modifier = Modifier
                     .height(
-                        (bannerHeight * expandedAspectRatio).coerceIn(
+                        (bannerHeight * toolbarState.expandedRatio).coerceIn(
                             minimumValue = toolbarHeightCollapsed,
                             maximumValue = bannerHeight
                         )
                     ),
                 leftIconModifier = Modifier.graphicsLayer {
-                    translationY = (1f - expandedAspectRatio) *
+                    translationY = (1f - toolbarState.expandedRatio) *
                             -iconCollapsedOffsetY.toPx()
-                    translationX = (1f - expandedAspectRatio) * iconHorizontalCenterLength
+                    translationX = (1f - toolbarState.expandedRatio) * iconHorizontalCenterLength
                 },
                 rightIconModifier = Modifier.graphicsLayer {
-                    translationY = (1f - expandedAspectRatio) *
+                    translationY = (1f - toolbarState.expandedRatio) *
                             -iconCollapsedOffsetY.toPx()
-                    translationX = (1f - expandedAspectRatio) * -iconHorizontalCenterLength
+                    translationX = (1f - toolbarState.expandedRatio) * -iconHorizontalCenterLength
                 }
             )
             Image(
@@ -182,12 +176,12 @@ fun ProfileScreen(
                     .align(CenterHorizontally)
                     .graphicsLayer {
                         translationY = -profilePictureSize.toPx() / 2f -
-                                (1 - expandedAspectRatio) * imageCollapsedOffset.toPx()
+                                (1 - toolbarState.expandedRatio) * imageCollapsedOffsetY.toPx()
                         transformOrigin = TransformOrigin(
                             pivotFractionX = 0.5f,
                             pivotFractionY = 0f
                         )
-                        val scale = 0.5f + expandedAspectRatio * 0.5f
+                        val scale = 0.5f + toolbarState.expandedRatio * 0.5f
                         scaleX = scale
                         scaleY = scale
                     }
