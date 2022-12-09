@@ -31,11 +31,11 @@ import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.models.User
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
-import com.prmto.socialnetwork_philiplackner.core.domain.util.toPx
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.Post
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfilePictureSizeLarge
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.toPx
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.components.BannerSection
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.components.ProfileHeaderSection
 

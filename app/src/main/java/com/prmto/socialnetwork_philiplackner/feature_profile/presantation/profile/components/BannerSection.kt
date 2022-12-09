@@ -15,9 +15,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.util.toPx
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.core.util.toPx
 
 @Composable
 fun BannerSection(

@@ -4,16 +4,26 @@ import android.util.Patterns
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.states.PasswordTextFieldState
 import com.prmto.socialnetwork_philiplackner.core.domain.states.StandardTextFieldState
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Constants.MIN_PASSWORD_LENGTH
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Constants.MIN_USERNAME_LENGTH
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.MIN_PASSWORD_LENGTH
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.MIN_USERNAME_LENGTH
+import com.prmto.socialnetwork_philiplackner.core.util.Resource
+import com.prmto.socialnetwork_philiplackner.core.util.UiText
+import com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case.RegisterUseCase
 import com.prmto.socialnetwork_philiplackner.feature_auth.util.AuthError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor() : ViewModel() {
+class RegisterViewModel @Inject constructor(
+    private val registerUseCase: RegisterUseCase
+) : ViewModel() {
 
     private val _emailState = mutableStateOf(StandardTextFieldState())
     val emailState: State<StandardTextFieldState> get() = _emailState
@@ -23,6 +33,12 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
     private val _passwordState = mutableStateOf(PasswordTextFieldState())
     val passwordState: State<PasswordTextFieldState> get() = _passwordState
+
+    private val _registerState = mutableStateOf(RegisterState())
+    val registerState: State<RegisterState> = _registerState
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
 
     fun onEvent(event: RegisterEvent) {
@@ -51,6 +67,39 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                 validateUsername(usernameState.value.text)
                 validateEmail(emailState.value.text)
                 validatePassword(passwordState.value.text)
+                registerIfNoErrors()
+            }
+        }
+    }
+
+    private fun registerIfNoErrors() {
+        if (emailState.value.error != null || usernameState.value.error != null || passwordState.value.error != null) {
+            return
+        }
+        _registerState.value = RegisterState(isLoading = true)
+        viewModelScope.launch {
+            val result = registerUseCase(
+                email = emailState.value.text,
+                username = usernameState.value.text,
+                password = passwordState.value.text
+            )
+            when (result) {
+                is Resource.Success -> {
+                    _eventFlow.emit(
+                        UiEvent.SnackbarEvent(
+                            UiText.StringResource(R.string.success_registration)
+                        ),
+                    )
+                    _registerState.value = RegisterState(isLoading = false)
+                }
+                is Resource.Error -> {
+                    _eventFlow.emit(
+                        UiEvent.SnackbarEvent(
+                            result.uiText ?: UiText.unknownError()
+                        ),
+                    )
+                    _registerState.value = RegisterState(isLoading = false)
+                }
             }
         }
     }
@@ -111,5 +160,9 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
             return
         }
         _passwordState.value = _passwordState.value.copy(error = null)
+    }
+
+    sealed class UiEvent {
+        data class SnackbarEvent(val uiText: UiText) : UiEvent()
     }
 }

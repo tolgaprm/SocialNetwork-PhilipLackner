@@ -1,6 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.core.domain.states
 
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Error
+import com.prmto.socialnetwork_philiplackner.core.util.Error
 
 data class PasswordTextFieldState(
     val text: String = "",

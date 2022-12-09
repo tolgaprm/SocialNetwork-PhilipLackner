@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Constants.MAX_POST_DESCRIPTION_LINES
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.*
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.MAX_POST_DESCRIPTION_LINES
 
 @Composable
 fun Post(

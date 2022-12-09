@@ -13,9 +13,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Activity
-import com.prmto.socialnetwork_philiplackner.core.domain.util.DateFormatUtil
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
+import com.prmto.socialnetwork_philiplackner.core.util.DateFormatUtil
 import com.prmto.socialnetwork_philiplackner.feature_activity.domain.ActivityAction
 import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity.components.ActivityItem
 import kotlin.random.Random

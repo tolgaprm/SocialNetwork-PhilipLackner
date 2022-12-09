@@ -16,8 +16,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Constants.SPLASH_SCREEN_DURATION
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.SPLASH_SCREEN_DURATION
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import kotlinx.coroutines.delay
 
 @Composable

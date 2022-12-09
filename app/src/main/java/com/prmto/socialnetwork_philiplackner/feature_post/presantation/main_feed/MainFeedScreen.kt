@@ -15,9 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.Post
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 
 @Composable
 fun MainFeedScreen(

@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.core.domain.util
+package com.prmto.socialnetwork_philiplackner.core.util
 
 import android.content.res.Resources
 import android.util.TypedValue

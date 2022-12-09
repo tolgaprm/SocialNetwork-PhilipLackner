@@ -7,14 +7,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.Navigation
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardScaffold
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalMaterialApi
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
-
+                    val scaffoldState = rememberScaffoldState()
                     StandardScaffold(
                         navController = navController,
                         showBottomBar = listOf(
@@ -42,22 +43,13 @@ class MainActivity : ComponentActivity() {
                         ).any {
                             currentDestination?.route == it
                         },
-                        showBackArrow = listOf(
-                            Screen.PostDetailScreen.route,
-                            Screen.MessagesScreen.route,
-                            Screen.EditProfileScreen.route,
-                            Screen.SearchScreen.route,
-                            Screen.CreatePostScreen.route,
-                            Screen.PersonListScreen.route
-                        ).any {
-                            currentDestination?.route == it
-                        },
+                        scaffoldState = scaffoldState,
                         modifier = Modifier.fillMaxSize(),
                         onFabClick = {
                             navController.navigate(Screen.CreatePostScreen.route)
                         }
                     ) {
-                        Navigation(navController)
+                        Navigation(navController,scaffoldState)
                     }
 
 

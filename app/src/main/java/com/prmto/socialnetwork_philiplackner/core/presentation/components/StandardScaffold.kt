@@ -1,7 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.core.presentation.components
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -18,17 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.BottomNavItem
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 
 @Composable
 fun StandardScaffold(
     navController: NavController,
     modifier: Modifier = Modifier,
     showBottomBar: Boolean = true,
-    showToolBar: Boolean = true,
-    showBackArrow: Boolean = true,
-    toolbarTitle: String? = null,
-    navActions: @Composable RowScope.() -> Unit = {},
+    scaffoldState: ScaffoldState,
     bottomNavItems: List<BottomNavItem> = listOf(
         BottomNavItem(
             route = Screen.MainFeedScreen.route,
@@ -91,6 +87,7 @@ fun StandardScaffold(
             }
 
         },
+        scaffoldState = scaffoldState,
         floatingActionButton = {
             if (showBottomBar) {
                 FloatingActionButton(

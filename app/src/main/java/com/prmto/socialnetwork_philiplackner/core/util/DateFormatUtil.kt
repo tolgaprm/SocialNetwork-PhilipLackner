@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.core.domain.util
+package com.prmto.socialnetwork_philiplackner.core.util
 
 import java.text.SimpleDateFormat
 import java.util.*

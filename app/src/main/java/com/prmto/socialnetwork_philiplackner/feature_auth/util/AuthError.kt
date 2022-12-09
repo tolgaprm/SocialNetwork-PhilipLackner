@@ -1,6 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.feature_auth.util
 
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Error
+import com.prmto.socialnetwork_philiplackner.core.util.Error
 
 sealed class AuthError : Error() {
     object FieldEmpty : AuthError()

@@ -2,12 +2,12 @@ package com.prmto.socialnetwork_philiplackner.feature_auth.presantation.register
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -19,25 +19,44 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Constants.MIN_PASSWORD_LENGTH
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Constants.MIN_USERNAME_LENGTH
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardTextField
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.MIN_PASSWORD_LENGTH
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.MIN_USERNAME_LENGTH
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.feature_auth.util.AuthError
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    scaffoldState: ScaffoldState,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
 
     val usernameState = viewModel.usernameState.value
     val emailState = viewModel.emailState.value
     val passwordState = viewModel.passwordState.value
+    val registerState = viewModel.registerState.value
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is RegisterViewModel.UiEvent.SnackbarEvent -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        event.uiText.asString(context),
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -135,12 +154,16 @@ fun RegisterScreen(
                 onClick = {
                     viewModel.onEvent(RegisterEvent.Register)
                 },
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.End),
+                enabled = !registerState.isLoading
             ) {
                 Text(
                     text = stringResource(id = R.string.register),
                     color = MaterialTheme.colors.onPrimary
                 )
+            }
+            if (registerState.isLoading) {
+                CircularProgressIndicator()
             }
         }
 

@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.core.domain.util
+package com.prmto.socialnetwork_philiplackner.core.util
 
 object Constants {
     const val SPLASH_SCREEN_DURATION = 0L

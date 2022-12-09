@@ -1,12 +1,13 @@
 package com.prmto.socialnetwork_philiplackner.core.presentation.components
 
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
-import com.prmto.socialnetwork_philiplackner.core.domain.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.login.LoginScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.register.RegisterScreen
@@ -22,7 +23,10 @@ import com.prmto.socialnetwork_philiplackner.feature_splash.presantation.splash.
 
 @ExperimentalMaterialApi
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController,
+    scaffoldState: ScaffoldState
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.LoginScreen.route
@@ -36,7 +40,10 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(Screen.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
+            RegisterScreen(
+                navController = navController,
+                scaffoldState = scaffoldState,
+            )
         }
 
         composable(Screen.MainFeedScreen.route) {

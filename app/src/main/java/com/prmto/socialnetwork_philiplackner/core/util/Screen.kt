@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.core.domain.util
+package com.prmto.socialnetwork_philiplackner.core.util
 
 sealed class Screen(val route: String) {
   object SplashScreen : Screen("splash_screen")

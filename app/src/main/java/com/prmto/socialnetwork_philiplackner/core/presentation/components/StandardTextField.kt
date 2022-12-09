@@ -21,8 +21,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.util.TestTags
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.IconSizeMedium
+import com.prmto.socialnetwork_philiplackner.core.util.TestTags
 
 @Composable
 fun StandardTextField(
