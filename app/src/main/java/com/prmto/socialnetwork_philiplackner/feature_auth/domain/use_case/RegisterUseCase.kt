@@ -1,6 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case
 
-import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
+import com.prmto.socialnetwork_philiplackner.core.domain.util.ValidationUtil
+import com.prmto.socialnetwork_philiplackner.feature_auth.domain.models.RegisterResult
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.repository.AuthRepository
 
 class RegisterUseCase(
@@ -11,11 +12,22 @@ class RegisterUseCase(
         email: String,
         username: String,
         password: String
-    ): SimpleResource {
-        return repository.register(
-            email = email.trim(),
-            username = username.trim(),
-            password = password.trim()
+    ): RegisterResult {
+
+        val emailError = ValidationUtil.validateEmail(email)
+        val usernameError = ValidationUtil.validateUsername(username)
+        val passwordError = ValidationUtil.validatePassword(password)
+        if (emailError != null || usernameError != null || passwordError != null) {
+            return RegisterResult(
+                emailError = emailError,
+                usernameError = usernameError,
+                passwordError = passwordError,
+            )
+        }
+
+        val result = repository.register(email.trim(), username.trim(), password.trim())
+        return RegisterResult(
+            result = result
         )
     }
 }
