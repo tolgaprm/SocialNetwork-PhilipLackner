@@ -14,8 +14,9 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.prmto.socialnetwork_philiplackner.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
-import com.prmto.socialnetwork_philiplackner.presentation.util.TestTags.STANDARD_TEXT_FIELD
+import com.prmto.socialnetwork_philiplackner.core.domain.util.TestTags.STANDARD_TEXT_FIELD
+import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardTextField
+import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
