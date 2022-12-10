@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.states.PasswordTextFieldState
 import com.prmto.socialnetwork_philiplackner.core.domain.states.StandardTextFieldState
+import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case.RegisterUseCase
@@ -121,9 +122,5 @@ class RegisterViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    sealed class UiEvent {
-        data class SnackbarEvent(val uiText: UiText) : UiEvent()
     }
 }

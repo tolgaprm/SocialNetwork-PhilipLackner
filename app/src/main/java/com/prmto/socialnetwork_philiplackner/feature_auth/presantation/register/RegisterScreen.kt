@@ -23,6 +23,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Constants.MIN_PASSWORD_LENGTH
 import com.prmto.socialnetwork_philiplackner.core.util.Constants.MIN_USERNAME_LENGTH
@@ -48,7 +49,7 @@ fun RegisterScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is RegisterViewModel.UiEvent.SnackbarEvent -> {
+                is UiEvent.SnackbarEvent -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         event.uiText.asString(context),
                         duration = SnackbarDuration.Short

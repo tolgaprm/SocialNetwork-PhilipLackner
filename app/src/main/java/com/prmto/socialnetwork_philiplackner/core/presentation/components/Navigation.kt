@@ -11,6 +11,7 @@ import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.login.LoginScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.register.RegisterScreen
+import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.splash.SplashScreen
 import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.chat.ChatScreen
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.create_post.CreatePostScreen
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.main_feed.MainFeedScreen
@@ -19,7 +20,6 @@ import com.prmto.socialnetwork_philiplackner.feature_post.presantation.post_deta
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.edit_profile.EditProfileScreen
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.ProfileScreen
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.search.SearchScreen
-import com.prmto.socialnetwork_philiplackner.feature_splash.presantation.splash.SplashScreen
 
 @ExperimentalMaterialApi
 @Composable
@@ -29,7 +29,7 @@ fun Navigation(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route
+        startDestination = Screen.SplashScreen.route
     ) {
         composable(Screen.SplashScreen.route) {
             SplashScreen(navController = navController)
