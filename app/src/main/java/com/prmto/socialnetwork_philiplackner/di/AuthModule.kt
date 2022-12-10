@@ -1,8 +1,10 @@
 package com.prmto.socialnetwork_philiplackner.di
 
+import android.content.SharedPreferences
 import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.AuthApi
 import com.prmto.socialnetwork_philiplackner.feature_auth.data.repository.AuthRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.repository.AuthRepository
+import com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case.LoginUseCase
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case.RegisterUseCase
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,14 +30,23 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(authApi: AuthApi): AuthRepository {
-        return AuthRepositoryImpl(authApi)
+    fun provideAuthRepository(
+        authApi: AuthApi,
+        sharedPreferences: SharedPreferences
+    ): AuthRepository {
+        return AuthRepositoryImpl(authApi, sharedPreferences)
     }
 
     @Provides
     @Singleton
     fun provideRegisterUseCase(repository: AuthRepository): RegisterUseCase {
         return RegisterUseCase(repository = repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoginUseCase(repository: AuthRepository): LoginUseCase {
+        return LoginUseCase(repository = repository)
     }
 
 }

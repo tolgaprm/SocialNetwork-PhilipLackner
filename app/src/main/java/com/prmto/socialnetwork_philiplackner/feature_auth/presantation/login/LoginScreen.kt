@@ -2,12 +2,12 @@ package com.prmto.socialnetwork_philiplackner.feature_auth.presantation.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -23,14 +23,38 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    scaffoldState: ScaffoldState,
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
+
+    val emailState = loginViewModel.emailState.value
+    val passwordState = loginViewModel.passwordState.value
+    val isLoading = loginViewModel.isLoading
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = true) {
+        loginViewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is LoginViewModel.UiEvent.SnackbarEvent -> {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.uiText.asString(context),
+                        duration = SnackbarDuration.Short
+                    )
+                }
+                is LoginViewModel.UiEvent.Navigate -> {
+                    navController.navigate(Screen.MainFeedScreen.route)
+                }
+            }
+        }
+    }
 
     Box(
         modifier = modifier
@@ -59,35 +83,35 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(SpaceMedium))
 
             StandardTextField(
-                text = loginViewModel.userNameText.value,
+                text = emailState.text,
                 onValueChange = {
-                    loginViewModel.setUserNameText(it)
+                    loginViewModel.onEvent(LoginEvent.EnteredEmail(it))
                 },
                 keyboardType = KeyboardType.Email,
-                error = loginViewModel.usernameError.value,
-                hint = stringResource(id = R.string.login_hint)
+                error = if (emailState.error != null) stringResource(id = R.string.error_field_empty) else "",
+                hint = stringResource(id = R.string.email_hint)
             )
 
             Spacer(modifier = Modifier.height(SpaceSmall))
 
             StandardTextField(
-                text = loginViewModel.passwordText.value,
+                text = passwordState.text,
                 onValueChange = {
-                    loginViewModel.setPasswordText(it)
+                    loginViewModel.onEvent(LoginEvent.EnteredPassword(it))
                 },
                 hint = stringResource(id = R.string.password_hint),
                 keyboardType = KeyboardType.Password,
-                error = loginViewModel.passwordError.value,
-                showPasswordVisible = loginViewModel.showPassword.value,
+                error = if (emailState.error != null) stringResource(id = R.string.error_field_empty) else "",
+                showPasswordVisible = passwordState.isPasswordVisible,
                 onPasswordToggleClick = {
-                    loginViewModel.setShowPassword(it)
+                    loginViewModel.onEvent(LoginEvent.TogglePasswordVisibility)
                 }
             )
             Spacer(modifier = Modifier.height(SpaceMedium))
 
             Button(
                 onClick = {
-                    navController.navigate(Screen.MainFeedScreen.route)
+                    loginViewModel.onEvent(LoginEvent.Login)
                 },
                 modifier = Modifier.align(Alignment.End)
             ) {

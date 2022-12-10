@@ -7,13 +7,11 @@ import com.prmto.socialnetwork_philiplackner.feature_auth.domain.repository.Auth
 class RegisterUseCase(
     private val repository: AuthRepository
 ) {
-
     suspend operator fun invoke(
         email: String,
         username: String,
         password: String
     ): RegisterResult {
-
         val emailError = ValidationUtil.validateEmail(email)
         val usernameError = ValidationUtil.validateUsername(username)
         val passwordError = ValidationUtil.validatePassword(password)

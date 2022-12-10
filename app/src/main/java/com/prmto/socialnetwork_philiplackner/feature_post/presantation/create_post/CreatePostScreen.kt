@@ -89,7 +89,7 @@ fun CreatePostScreen(
                     .fillMaxWidth(),
                 text = viewModel.descriptionState.value.text,
                 error = when (viewModel.descriptionState.value.error) {
-                    PostDescriptionError.FieldEmpty -> stringResource(id = R.string.thid_field_cant_be_empty)
+                    PostDescriptionError.FieldEmpty -> stringResource(id = R.string.error_field_empty)
                     else -> ""
                 },
                 hint = stringResource(id = R.string.description),
