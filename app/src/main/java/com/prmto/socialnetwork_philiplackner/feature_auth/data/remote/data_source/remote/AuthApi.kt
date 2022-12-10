@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote
+package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote
 
 import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
 import com.prmto.socialnetwork_philiplackner.feature_auth.data.dto.request.CreateAccountRequest

@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -38,7 +39,7 @@ fun LoginScreen(
 
     val emailState = loginViewModel.emailState.value
     val passwordState = loginViewModel.passwordState.value
-    val isLoading = loginViewModel.isLoading
+    val isLoading = loginViewModel.isLoading.value
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
@@ -120,6 +121,9 @@ fun LoginScreen(
                     text = stringResource(id = R.string.login),
                     color = MaterialTheme.colors.onPrimary
                 )
+            }
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
             }
         }
 
