@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.paging
+package com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

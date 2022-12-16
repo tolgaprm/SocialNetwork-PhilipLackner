@@ -1,8 +1,9 @@
 package com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.remote
 
+import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
-import retrofit2.http.GET
-import retrofit2.http.Query
+import okhttp3.MultipartBody
+import retrofit2.http.*
 
 interface PostApi {
 
@@ -11,6 +12,13 @@ interface PostApi {
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): List<Post>
+
+    @Multipart
+    @POST("/api/post/create")
+    suspend fun createPost(
+        @Part postData: MultipartBody.Part,
+        @Part postImage: MultipartBody.Part
+    ): BasicApiResponse<Unit>
 
 
     companion object {

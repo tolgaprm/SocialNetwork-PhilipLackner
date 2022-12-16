@@ -57,4 +57,6 @@ object AuthModule {
     fun provideAuthenticateUseCase(repository: AuthRepository): AuthenticateUseCase {
         return AuthenticateUseCase(repository = repository)
     }
+
+
 }

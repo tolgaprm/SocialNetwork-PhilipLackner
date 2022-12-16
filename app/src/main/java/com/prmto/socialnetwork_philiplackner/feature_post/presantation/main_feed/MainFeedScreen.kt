@@ -65,7 +65,7 @@ fun MainFeedScreen(
             }
         )
         Box(modifier = Modifier.fillMaxSize()) {
-            if (state.isLoadingFirstTime){
+            if (state.isLoadingFirstTime) {
                 CircularProgressIndicator(modifier = Modifier.align(Center))
             }
             LazyColumn {
