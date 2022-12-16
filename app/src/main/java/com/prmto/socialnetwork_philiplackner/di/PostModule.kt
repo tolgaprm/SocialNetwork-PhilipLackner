@@ -1,6 +1,5 @@
 package com.prmto.socialnetwork_philiplackner.di
 
-import android.content.Context
 import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_post.data.repository.PostRepositoryImpl
@@ -10,7 +9,6 @@ import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.GetPos
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -36,10 +34,9 @@ object PostModule {
     @Singleton
     fun providePostRepository(
         postApi: PostApi,
-        gson: Gson,
-        @ApplicationContext appContext: Context
+        gson: Gson
     ): PostRepository {
-        return PostRepositoryImpl(postApi, gson, appContext)
+        return PostRepositoryImpl(postApi, gson)
     }
 
     @Provides
