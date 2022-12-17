@@ -1,7 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.di
 
 import android.content.SharedPreferences
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.AuthApi
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.AuthApi
 import com.prmto.socialnetwork_philiplackner.feature_auth.data.repository.AuthRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.repository.AuthRepository
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case.AuthenticateUseCase

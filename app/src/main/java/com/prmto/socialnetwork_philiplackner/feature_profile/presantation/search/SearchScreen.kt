@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.User
 import com.prmto.socialnetwork_philiplackner.core.domain.states.StandardTextFieldState
@@ -23,17 +22,18 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.UserProfileItem
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 
 @ExperimentalMaterialApi
 @Composable
 fun SearchScreen(
-    navController: NavController,
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
+    onNavigateUp: () -> Unit = {},
+    onNavigate: (String) -> Unit = {}
 ) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         StandardToolbar(
-            navController = navController,
             showBackArrow = true,
             title = {
                 Text(
@@ -41,7 +41,8 @@ fun SearchScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onBackground
                 )
-            }
+            },
+            onNavigateUp = onNavigateUp
         )
 
         Column(
@@ -72,15 +73,19 @@ fun SearchScreen(
                 items(10) {
                     UserProfileItem(
                         user = User(
+                            userId = "6367b3cec4e4cc0ccf405035",
                             profilePictureUrl = "",
                             username = "Tolga Pirim",
-                            description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed\n" +
+                            bio = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed\n" +
                                     "diam nonumy eirmod tempor invidunt ut labore et dolore \n" +
                                     "magna aliquyam erat, sed diam voluptua",
                             followerCount = 1455,
                             followingCount = 25,
                             postCount = 54
                         ),
+                        onItemClick = {
+                            onNavigate(Screen.ProfileScreen.route + "?userId=6367b3cec4e4cc0ccf405035")
+                        },
                         actionIcon = {
                             Icon(
                                 imageVector = Icons.Default.PersonAdd,

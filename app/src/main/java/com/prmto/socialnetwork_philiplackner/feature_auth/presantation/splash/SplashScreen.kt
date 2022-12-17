@@ -15,14 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SplashScreen(
-    navController: NavController,
+    onPopBackStack: () -> Unit = {},
+    onNavigate: (String) -> Unit = {},
     viewModel: SplashViewModel = hiltViewModel()
 ) {
 
@@ -48,8 +48,8 @@ fun SplashScreen(
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.Navigate -> {
-                    navController.popBackStack()
-                    navController.navigate(event.route)
+                    onPopBackStack()
+                    onNavigate(event.route)
                 }
                 else -> Unit
             }

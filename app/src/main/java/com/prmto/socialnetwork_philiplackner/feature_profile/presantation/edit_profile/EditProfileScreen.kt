@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.prmto.socialnetwork_philiplackner.R
@@ -42,8 +41,8 @@ import kotlin.random.Random
 @ExperimentalMaterialApi
 @Composable
 fun EditProfileScreen(
-    navController: NavController,
-    viewModel: EditProfileViewModel = hiltViewModel()
+    viewModel: EditProfileViewModel = hiltViewModel(),
+    onNavigateUp: () -> Unit = {}
 ) {
 
 
@@ -51,7 +50,6 @@ fun EditProfileScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         StandardToolbar(
-            navController = navController,
             showBackArrow = true,
             title = {
                 Text(
@@ -60,6 +58,7 @@ fun EditProfileScreen(
                     color = MaterialTheme.colors.onBackground
                 )
             },
+            onNavigateUp = onNavigateUp,
             navActions = {
                 IconButton(onClick = { }) {
                     Icon(
@@ -172,7 +171,7 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     text = viewModel.bioState.value.text,
-                    error =  when (viewModel.bioState.value.error) {
+                    error = when (viewModel.bioState.value.error) {
                         EditProfileError.FieldEmpty -> stringResource(
                             id = R.string.error_field_empty
                         )

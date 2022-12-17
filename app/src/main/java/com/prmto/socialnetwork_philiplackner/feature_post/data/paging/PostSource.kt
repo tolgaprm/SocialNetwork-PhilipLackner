@@ -1,10 +1,10 @@
-package com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.paging
+package com.prmto.socialnetwork_philiplackner.feature_post.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.util.Constants
-import com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.remote.PostApi
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject

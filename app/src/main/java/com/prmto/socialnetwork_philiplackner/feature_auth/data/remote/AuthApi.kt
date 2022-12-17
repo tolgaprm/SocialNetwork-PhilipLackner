@@ -1,9 +1,9 @@
-package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote
+package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote
 
 import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.request.CreateAccountRequest
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.request.LoginRequest
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.response.AuthResponse
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.request.CreateAccountRequest
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.request.LoginRequest
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.response.AuthResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

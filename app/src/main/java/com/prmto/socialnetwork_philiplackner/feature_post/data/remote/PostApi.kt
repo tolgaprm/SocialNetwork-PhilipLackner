@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.remote
+package com.prmto.socialnetwork_philiplackner.feature_post.data.remote
 
 import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post

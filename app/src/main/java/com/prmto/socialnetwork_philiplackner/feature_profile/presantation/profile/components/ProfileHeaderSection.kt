@@ -63,13 +63,15 @@ fun ProfileHeaderSection(
         }
 
         Spacer(modifier = Modifier.height(SpaceMedium))
-        Text(
-            text = user.description,
-            style = MaterialTheme.typography.body2.copy(
-                fontSize = 16.sp
-            ),
-            textAlign = TextAlign.Center
-        )
+        if (user.bio.isNotBlank()){
+            Text(
+                text = user.bio,
+                style = MaterialTheme.typography.body2.copy(
+                    fontSize = 16.sp
+                ),
+                textAlign = TextAlign.Center
+            )
+        }
         Spacer(modifier = Modifier.height(SpaceLarge))
         ProfileStats(
             user = user,

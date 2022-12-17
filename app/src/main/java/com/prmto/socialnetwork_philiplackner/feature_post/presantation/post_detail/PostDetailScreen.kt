@@ -19,8 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Comment
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
@@ -30,14 +28,14 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.*
 
 @Composable
 fun PostDetailScreen(
-    navController: NavController,
-    post: Post
+    post: Post,
+    onNavigateUp: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         StandardToolbar(
-            navController = navController,
+            modifier = Modifier.fillMaxWidth(),
             title = {
                 Text(
                     text = stringResource(id = R.string.your_feed),
@@ -45,7 +43,7 @@ fun PostDetailScreen(
                     color = MaterialTheme.colors.onBackground
                 )
             },
-            modifier = Modifier.fillMaxWidth(),
+            onNavigateUp = onNavigateUp,
             showBackArrow = true,
         )
         LazyColumn(
@@ -239,7 +237,6 @@ fun PostDetailPreview() {
 
     SocialNetworkPhilipLacknerTheme {
         PostDetailScreen(
-            navController = rememberNavController(),
             post = Post(
                 username = "Tolga Pirim",
                 imageUrl = "",

@@ -34,6 +34,7 @@ object Module {
         return sharedPreferences.getString(Constants.KEY_JWT_TOKEN, "") ?: ""
     }
 
+
     @Provides
     @Singleton
     fun provideOkHttpClient(

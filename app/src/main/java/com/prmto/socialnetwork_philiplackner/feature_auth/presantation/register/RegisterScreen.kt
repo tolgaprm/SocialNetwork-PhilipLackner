@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardTextField
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
@@ -34,7 +33,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
+    onPopStack: () -> Unit = {},
     scaffoldState: ScaffoldState,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
@@ -49,7 +48,7 @@ fun RegisterScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is UiEvent.SnackbarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         event.uiText.asString(context),
                         duration = SnackbarDuration.Short
@@ -186,7 +185,7 @@ fun RegisterScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .clickable {
-                    navController.popBackStack()
+                    onPopStack()
                 }
         )
     }

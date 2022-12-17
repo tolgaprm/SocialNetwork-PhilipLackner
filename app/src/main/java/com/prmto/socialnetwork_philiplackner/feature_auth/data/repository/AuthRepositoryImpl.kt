@@ -6,9 +6,9 @@ import com.prmto.socialnetwork_philiplackner.core.util.Constants.KEY_JWT_TOKEN
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.AuthApi
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.request.CreateAccountRequest
-import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.request.LoginRequest
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.AuthApi
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.request.CreateAccountRequest
+import com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.request.LoginRequest
 import com.prmto.socialnetwork_philiplackner.feature_auth.domain.repository.AuthRepository
 import okio.IOException
 import retrofit2.HttpException

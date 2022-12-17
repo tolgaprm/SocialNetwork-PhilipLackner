@@ -12,9 +12,9 @@ import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
-import com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.paging.PostSource
-import com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.remote.PostApi
-import com.prmto.socialnetwork_philiplackner.feature_post.data.data_source.remote.request.CreatePostRequest
+import com.prmto.socialnetwork_philiplackner.feature_post.data.paging.PostSource
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreatePostRequest
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.repository.PostRepository
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody

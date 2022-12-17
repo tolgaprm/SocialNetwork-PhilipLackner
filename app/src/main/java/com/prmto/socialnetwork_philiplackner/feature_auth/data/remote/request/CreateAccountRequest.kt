@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.data_source.remote.request
+package com.prmto.socialnetwork_philiplackner.feature_auth.data.remote.request
 
 data class CreateAccountRequest(
     val username: String,

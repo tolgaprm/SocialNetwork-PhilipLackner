@@ -18,7 +18,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardTextField
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
@@ -32,8 +31,8 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
     scaffoldState: ScaffoldState,
+    onNavigate: (String) -> Unit = {},
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
 
@@ -45,14 +44,14 @@ fun LoginScreen(
     LaunchedEffect(key1 = true) {
         loginViewModel.eventFlow.collectLatest { event ->
             when (event) {
-                is UiEvent.SnackbarEvent -> {
+                is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.uiText.asString(context),
                         duration = SnackbarDuration.Short
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(Screen.MainFeedScreen.route)
+                    onNavigate(event.route)
                 }
             }
         }
@@ -145,7 +144,7 @@ fun LoginScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .clickable {
-                    navController.navigate(Screen.RegisterScreen.route)
+                    onNavigate(Screen.RegisterScreen.route)
                 }
         )
     }
