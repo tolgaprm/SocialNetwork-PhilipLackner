@@ -30,7 +30,8 @@ import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.Post
@@ -108,6 +109,7 @@ fun ProfileScreen(
                         message = event.uiText.asString(context)
                     )
                 }
+                else -> {}
             }
         }
     }
@@ -192,13 +194,17 @@ fun ProfileScreen(
                     },
                     bannerUrl = profile.bannerUrl,
                     topSkills = profile.topSkills,
-                    shouldShowGitHub = profile.gitHubUrl != null,
-                    shouldShowInstagram = profile.instagramUrl != null,
-                    shouldShowLinkedInUrl = profile.linkedInUrl != null
+                    shouldShowGitHub = profile.gitHubUrl != null && profile.gitHubUrl.isNotBlank(),
+                    shouldShowInstagram = profile.instagramUrl != null && profile.instagramUrl.isNotBlank(),
+                    shouldShowLinkedInUrl = profile.linkedInUrl != null && profile.linkedInUrl.isNotBlank()
                 )
 
                 Image(
-                    painter = rememberImagePainter(data = profile.profilePictureUrl),
+                    painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(context)
+                            .data(profile.profilePictureUrl)
+                            .build()
+                    ),
                     contentDescription = stringResource(id = R.string.profile_picture),
                     modifier = Modifier
                         .align(CenterHorizontally)

@@ -265,7 +265,6 @@ fun EditProfileScreen(
                     crossAxisSpacing = SpaceSmall
                 ) {
                     viewModel.skills.value.skills.forEach {
-
                         val selected by remember {
                             mutableStateOf(it in viewModel.skills.value.selectedSkills)
                         }

@@ -10,12 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import coil.decode.SvgDecoder
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
 import com.prmto.socialnetwork_philiplackner.core.util.toPx
@@ -81,8 +84,13 @@ fun BannerSection(
                 Image(
                     painter = rememberImagePainter(
                         data = skillUrl.imageUrl,
+                        imageLoader = ImageLoader.Builder(LocalContext.current)
+                            .components {
+                                add(SvgDecoder.Factory())
+                            }.build(),
                         builder = {
                             crossfade(true)
+
                         }
                     ),
                     contentDescription = null,
