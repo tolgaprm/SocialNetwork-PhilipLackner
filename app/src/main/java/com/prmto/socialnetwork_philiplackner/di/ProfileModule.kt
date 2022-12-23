@@ -1,10 +1,13 @@
 package com.prmto.socialnetwork_philiplackner.di
 
+import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.ProfileApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.repository.ProfileRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.GetProfileUseCase
+import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.GetSkillsUseCase
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.ProfileUseCases
+import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.UpdateProfileUseCase
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -30,13 +33,17 @@ object ProfileModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(api: ProfileApi): ProfileRepository {
-        return ProfileRepositoryImpl(api)
+    fun provideProfileRepository(api: ProfileApi, gson: Gson): ProfileRepository {
+        return ProfileRepositoryImpl(api, gson)
     }
 
     @Provides
     @Singleton
     fun provideProfileUseCases(repository: ProfileRepository): ProfileUseCases {
-        return ProfileUseCases(GetProfileUseCase(repository))
+        return ProfileUseCases(
+            GetProfileUseCase(repository),
+            GetSkillsUseCase(repository),
+            UpdateProfileUseCase(repository)
+        )
     }
 }

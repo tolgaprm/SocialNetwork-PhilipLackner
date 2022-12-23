@@ -110,8 +110,16 @@ fun Navigation(
             )
         }
 
-        composable(Screen.EditProfileScreen.route) {
+        composable(
+            route = Screen.EditProfileScreen.route + "/{userId}",
+            arguments = listOf(
+                navArgument("userId") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
             EditProfileScreen(
+                scaffoldState = scaffoldState,
                 onNavigateUp = { navController.navigateUp() }
             )
         }

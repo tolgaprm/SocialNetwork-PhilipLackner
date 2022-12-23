@@ -8,7 +8,10 @@ import com.prmto.socialnetwork_philiplackner.core.domain.util.getFileName
 import com.yalantis.ucrop.UCrop
 import java.io.File
 
-class CropActivityResultContract : ActivityResultContract<Uri, Uri?>() {
+class CropActivityResultContract(
+    private val aspectRatioX:Float,
+    private val aspectRatioY:Float,
+) : ActivityResultContract<Uri, Uri?>() {
 
     override fun createIntent(context: Context, input: Uri): Intent {
         return UCrop.of(
@@ -19,7 +22,7 @@ class CropActivityResultContract : ActivityResultContract<Uri, Uri?>() {
                     context.contentResolver.getFileName(input)
                 )
             )
-        ).withAspectRatio(16f, 9f)
+        ).withAspectRatio(aspectRatioX, aspectRatioY)
             .getIntent(context)
     }
 

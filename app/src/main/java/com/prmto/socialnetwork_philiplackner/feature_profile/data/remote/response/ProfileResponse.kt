@@ -11,7 +11,7 @@ data class ProfileResponse(
     val postCount: Int,
     val bannerUrl: String,
     val profilePictureUrl: String,
-    val topSkillsUrls: List<String>,
+    val topSkills: List<SkillDto>,
     val gitHubUrl: String?,
     val instagramUrl: String?,
     val linkedInUrl: String?,
@@ -20,7 +20,7 @@ data class ProfileResponse(
 ) {
     fun toProfile(): Profile {
         return Profile(
-            userId=userId,
+            userId = userId,
             username = username,
             bio = bio,
             followerCount = followerCount,
@@ -28,7 +28,7 @@ data class ProfileResponse(
             postCount = postCount,
             bannerUrl = bannerUrl,
             profilePictureUrl = profilePictureUrl,
-            topSkillsUrls = topSkillsUrls,
+            topSkills = topSkills.map { it.toSkill() },
             gitHubUrl = gitHubUrl,
             instagramUrl = instagramUrl,
             linkedInUrl = linkedInUrl,

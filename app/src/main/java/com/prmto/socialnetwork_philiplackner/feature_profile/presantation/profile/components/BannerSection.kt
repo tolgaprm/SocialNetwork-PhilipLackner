@@ -19,6 +19,7 @@ import coil.compose.rememberImagePainter
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
 import com.prmto.socialnetwork_philiplackner.core.util.toPx
+import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Skill
 
 @ExperimentalCoilApi
 @Composable
@@ -27,7 +28,7 @@ fun BannerSection(
     iconSize: Dp = 35.dp,
     leftIconModifier: Modifier = Modifier,
     rightIconModifier: Modifier = Modifier,
-    topSkillsUrls: List<String>,
+    topSkills: List<Skill>,
     shouldShowGitHub: Boolean = false,
     shouldShowInstagram: Boolean = false,
     shouldShowLinkedInUrl: Boolean = false,
@@ -75,11 +76,11 @@ fun BannerSection(
                 .align(Alignment.BottomStart)
                 .padding(SpaceSmall)
         ) {
-            topSkillsUrls.forEach { skillUrl ->
+            topSkills.forEach { skillUrl ->
                 Spacer(modifier = Modifier.width(SpaceSmall))
                 Image(
                     painter = rememberImagePainter(
-                        data = skillUrl,
+                        data = skillUrl.imageUrl,
                         builder = {
                             crossfade(true)
                         }
