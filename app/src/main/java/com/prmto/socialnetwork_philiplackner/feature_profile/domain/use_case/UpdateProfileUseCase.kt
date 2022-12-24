@@ -23,6 +23,17 @@ class UpdateProfileUseCase(
                 )
             )
         }
+        val isValidGitHubUrl = updateProfileData.gitHubUrl.startsWith("https://github.com")
+                || updateProfileData.gitHubUrl.startsWith("http://github.com")
+                || updateProfileData.gitHubUrl.startsWith("github.com")
+
+        val gitHubPattern ="[http|https]".toRegex()
+
+        if (!isValidGitHubUrl) {
+            return Resource.Error(
+                uiText = UiText.StringResource(R.string.error_invalid_github_url)
+            )
+        }
         return repository.updateProfile(
             updateProfileData = updateProfileData,
             profilePictureUri = profilePictureUri,

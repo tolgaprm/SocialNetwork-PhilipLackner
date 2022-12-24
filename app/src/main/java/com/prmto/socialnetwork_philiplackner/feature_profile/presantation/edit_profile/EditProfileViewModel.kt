@@ -187,11 +187,39 @@ class EditProfileViewModel @Inject constructor(
             }
 
             is EditProfileEvents.SetSkillSelected -> {
+                val result = profileUseCases.setSkillsSelectedUseCase(
+                    selectedSkills = skills.value.selectedSkills,
+                    skillToToggle = event.skill
+                )
+                viewModelScope.launch {
+                    when (result) {
+                        is Resource.Success -> {
+                            _skills.value = skills.value.copy(
+                                selectedSkills = result.data ?: kotlin.run {
+                                    _eventFlow.emit(UiEvent.ShowSnackbar(UiText.unknownError()))
+                                    return@launch
+                                }
+                            )
+                        }
+                        is Resource.Error -> {
+                            _eventFlow.emit(
+                                UiEvent.ShowSnackbar(
+                                    uiText = result.uiText ?: UiText.unknownError()
+                                )
+                            )
+                            return@launch
+                        }
+                    }
+                }
+
 
             }
 
             is EditProfileEvents.UpdateProfile -> {
                 updateProfile()
+                viewModelScope.launch {
+                    _eventFlow.emit(UiEvent.NavigateUp)
+                }
             }
 
         }

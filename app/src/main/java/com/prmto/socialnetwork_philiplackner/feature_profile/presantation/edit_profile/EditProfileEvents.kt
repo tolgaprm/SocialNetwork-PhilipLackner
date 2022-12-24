@@ -1,6 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.feature_profile.presantation.edit_profile
 
 import android.net.Uri
+import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Skill
 
 sealed class EditProfileEvents {
     data class EnteredUserName(val value: String) : EditProfileEvents()
@@ -12,7 +13,7 @@ sealed class EditProfileEvents {
     data class CropProfileImage(val uri: Uri?) : EditProfileEvents()
     data class CropBannerImage(val uri: Uri?) : EditProfileEvents()
 
-    data class SetSkillSelected(val skill: String, val selected: Boolean) : EditProfileEvents()
+    data class SetSkillSelected(val skill: Skill) : EditProfileEvents()
 
     object UpdateProfile : EditProfileEvents()
 }

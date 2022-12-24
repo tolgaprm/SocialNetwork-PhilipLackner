@@ -4,10 +4,7 @@ import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.ProfileApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.repository.ProfileRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.GetProfileUseCase
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.GetSkillsUseCase
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.ProfileUseCases
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.UpdateProfileUseCase
+import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.*
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -43,7 +40,8 @@ object ProfileModule {
         return ProfileUseCases(
             GetProfileUseCase(repository),
             GetSkillsUseCase(repository),
-            UpdateProfileUseCase(repository)
+            UpdateProfileUseCase(repository),
+            SetSkillsSelectedUseCase()
         )
     }
 }

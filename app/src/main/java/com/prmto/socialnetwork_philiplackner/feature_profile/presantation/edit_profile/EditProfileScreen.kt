@@ -10,7 +10,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -28,7 +29,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.prmto.socialnetwork_philiplackner.R
@@ -94,6 +96,9 @@ fun EditProfileScreen(
                         message = event.uiText.asString(context)
                     )
                 }
+                is UiEvent.NavigateUp -> {
+                    onNavigateUp()
+                }
             }
         }
     }
@@ -132,17 +137,22 @@ fun EditProfileScreen(
 
         ) {
             BannerEditSection(
-                bannerImage = rememberImagePainter(
-                    data = profileState.profile?.bannerUrl,
-                    builder = {
-                        crossfade(true)
-                    },
+                bannerImage = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = viewModel.bannerUri.value ?: profileState.profile?.bannerUrl)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build()
                 ),
-                profileImage = rememberImagePainter(
-                    data = profileState.profile?.profilePictureUrl,
-                    builder = {
-                        crossfade(true)
-                    }
+                profileImage = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(
+                            data = viewModel.profilePictureUri.value
+                                ?: profileState.profile?.profilePictureUrl
+                        )
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build()
                 ),
                 onBannerClick = {
                     bannerImageGalleryLauncher.launch("image/*")
@@ -264,13 +274,11 @@ fun EditProfileScreen(
                     mainAxisSpacing = SpaceMedium,
                     crossAxisSpacing = SpaceSmall
                 ) {
-                    viewModel.skills.value.skills.forEach {
-                        val selected by remember {
-                            mutableStateOf(it in viewModel.skills.value.selectedSkills)
-                        }
+                    viewModel.skills.value.skills.forEach { skill ->
+                        val selected = skill in viewModel.skills.value.selectedSkills
                         FilterChip(
                             selected = selected,
-                            onClick = { },
+                            onClick = { viewModel.onEvent(EditProfileEvents.SetSkillSelected(skill)) },
                             colors = ChipDefaults.filterChipColors(
                                 backgroundColor = MaterialTheme.colors.background,
                                 selectedContentColor = MaterialTheme.colors.primary,
@@ -282,7 +290,7 @@ fun EditProfileScreen(
                             ),
                         ) {
                             Text(
-                                text = it.name,
+                                text = skill.name,
                                 modifier = Modifier.padding(SpaceSmall),
                                 color = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface
                             )

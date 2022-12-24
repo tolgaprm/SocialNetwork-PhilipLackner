@@ -17,8 +17,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
 import com.prmto.socialnetwork_philiplackner.core.util.toPx
@@ -46,7 +47,7 @@ fun BannerSection(
         Image(
             painter =
             if (bannerUrl != null) {
-                rememberImagePainter(data = bannerUrl)
+                rememberAsyncImagePainter(model = bannerUrl)
             } else {
                 painterResource(id = R.drawable.channelart)
             },
@@ -82,16 +83,14 @@ fun BannerSection(
             topSkills.forEach { skillUrl ->
                 Spacer(modifier = Modifier.width(SpaceSmall))
                 Image(
-                    painter = rememberImagePainter(
-                        data = skillUrl.imageUrl,
-                        imageLoader = ImageLoader.Builder(LocalContext.current)
+                    painter = rememberAsyncImagePainter(
+                        ImageRequest.Builder(LocalContext.current).data(data = skillUrl.imageUrl)
+                            .apply(block = fun ImageRequest.Builder.() {
+                                crossfade(true)
+                            }).build(), imageLoader = ImageLoader.Builder(LocalContext.current)
                             .components {
                                 add(SvgDecoder.Factory())
-                            }.build(),
-                        builder = {
-                            crossfade(true)
-
-                        }
+                            }.build()
                     ),
                     contentDescription = null,
                     modifier = Modifier.height(iconSize)

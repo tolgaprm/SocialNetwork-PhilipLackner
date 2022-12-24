@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 @ExperimentalCoilApi
 fun ProfileScreen(
+    userId:String,
     scaffoldState: ScaffoldState,
     profilePictureSize: Dp = ProfilePictureSizeLarge,
     viewModel: ProfileViewModel = hiltViewModel(),
@@ -102,6 +103,7 @@ fun ProfileScreen(
     }
 
     LaunchedEffect(key1 = true) {
+        viewModel.getProfile(userId = userId)
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.ShowSnackbar -> {
