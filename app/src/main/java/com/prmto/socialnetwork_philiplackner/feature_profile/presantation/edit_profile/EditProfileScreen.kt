@@ -1,6 +1,8 @@
 package com.prmto.socialnetwork_philiplackner.feature_profile.presantation.edit_profile
 
+import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -41,10 +44,12 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLar
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.CropActivityResultContract
+import com.prmto.socialnetwork_philiplackner.core.presentation.util.RequestPermissionUtil
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.feature_profile.util.EditProfileError
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
@@ -57,6 +62,8 @@ fun EditProfileScreen(
 
     val profileState = viewModel.profileState.value
     val context = LocalContext.current
+    val activity = context as Activity
+    val coroutineScope = rememberCoroutineScope()
 
     val cropProfilePictureLauncher = rememberLauncherForActivityResult(
         contract = CropActivityResultContract(
@@ -77,16 +84,36 @@ fun EditProfileScreen(
     }
 
     val profilePictureGalleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.PickVisualMedia()
     ) {
-        cropProfilePictureLauncher.launch(it)
+        it?.let {
+            cropProfilePictureLauncher.launch(it)
+        }
     }
 
     val bannerImageGalleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.PickVisualMedia()
     ) {
-        cropBannerImageLauncher.launch(it)
+        it?.let {
+            cropBannerImageLauncher.launch(it)
+        }
     }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) {
+        if (it) {
+            when (viewModel.clickedImage.value) {
+                EditProfileViewModel.ClickedImage.Profile -> {
+                    profilePictureGalleryLauncher.launch(PickVisualMediaRequest())
+                }
+                EditProfileViewModel.ClickedImage.BannerImage -> {
+                    bannerImageGalleryLauncher.launch(PickVisualMediaRequest())
+                }
+            }
+        }
+    }
+
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -155,10 +182,52 @@ fun EditProfileScreen(
                         }).build()
                 ),
                 onBannerClick = {
-                    bannerImageGalleryLauncher.launch("image/*")
+                    val permission = RequestPermissionUtil.getMediaAccessPermissionBySDK()
+                    RequestPermissionUtil.request(
+                        permission = permission,
+                        context = context,
+                        activity = activity,
+                        onShowSnackbarRationale = {
+                            val text = context.getString(R.string.necessary_to_pick_image)
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    text
+                                )
+                            }
+                        },
+                        onPermissionLauncher = {
+                            permissionLauncher.launch(permission)
+                        },
+                        onGalleryLauncher = {
+                            bannerImageGalleryLauncher.launch(
+                                PickVisualMediaRequest()
+                            )
+                        }
+                    )
                 },
                 onProfilePictureClick = {
-                    profilePictureGalleryLauncher.launch("image/*")
+                    val permission = RequestPermissionUtil.getMediaAccessPermissionBySDK()
+                    RequestPermissionUtil.request(
+                        permission = permission,
+                        context = context,
+                        activity = activity,
+                        onShowSnackbarRationale = {
+                            val text = context.getString(R.string.necessary_to_pick_image)
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    text
+                                )
+                            }
+                        },
+                        onPermissionLauncher = {
+                            permissionLauncher.launch(permission)
+                        },
+                        onGalleryLauncher = {
+                            profilePictureGalleryLauncher.launch(
+                                PickVisualMediaRequest()
+                            )
+                        }
+                    )
                 }
             )
 
@@ -298,14 +367,10 @@ fun EditProfileScreen(
                         }
                     }
                 }
-
-
             }
         }
     }
-
 }
-
 
 @Composable
 fun BannerEditSection(

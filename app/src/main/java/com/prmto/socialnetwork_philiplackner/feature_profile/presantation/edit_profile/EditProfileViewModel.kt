@@ -56,6 +56,8 @@ class EditProfileViewModel @Inject constructor(
     private val _profilePictureUri = mutableStateOf<Uri?>(null)
     val profilePictureUri: State<Uri?> = _profilePictureUri
 
+    private val _clickedImage = mutableStateOf<ClickedImage>(ClickedImage.BannerImage)
+    val clickedImage: State<ClickedImage> = _clickedImage
 
     init {
         savedStateHandle.get<String>("userId")?.let { userId ->
@@ -211,8 +213,13 @@ class EditProfileViewModel @Inject constructor(
                         }
                     }
                 }
+            }
 
-
+            is EditProfileEvents.ClickProfileImage -> {
+                _clickedImage.value = ClickedImage.Profile
+            }
+            is EditProfileEvents.ClickBannerImage -> {
+                _clickedImage.value = ClickedImage.BannerImage
             }
 
             is EditProfileEvents.UpdateProfile -> {
@@ -223,5 +230,10 @@ class EditProfileViewModel @Inject constructor(
             }
 
         }
+    }
+
+    enum class ClickedImage {
+        BannerImage,
+        Profile
     }
 }

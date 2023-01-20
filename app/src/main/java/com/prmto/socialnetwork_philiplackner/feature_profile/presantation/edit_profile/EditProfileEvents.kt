@@ -9,11 +9,11 @@ sealed class EditProfileEvents {
     data class EnteredInstagramUrl(val value: String) : EditProfileEvents()
     data class EnteredLinkedInUrl(val value: String) : EditProfileEvents()
     data class EnteredBio(val value: String) : EditProfileEvents()
-
     data class CropProfileImage(val uri: Uri?) : EditProfileEvents()
     data class CropBannerImage(val uri: Uri?) : EditProfileEvents()
 
+    object ClickBannerImage : EditProfileEvents()
+    object ClickProfileImage : EditProfileEvents()
     data class SetSkillSelected(val skill: Skill) : EditProfileEvents()
-
     object UpdateProfile : EditProfileEvents()
 }
