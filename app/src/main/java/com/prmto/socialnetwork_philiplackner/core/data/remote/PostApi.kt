@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_post.data.remote
+package com.prmto.socialnetwork_philiplackner.core.data.remote
 
 import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
@@ -12,6 +12,14 @@ interface PostApi {
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int
     ): List<Post>
+
+    @GET("/api/user/posts")
+    suspend fun getPostsForProfile(
+        @Query("userId") userId: String,
+        @Query("page") page: Int,
+        @Query("pageSize") pageSize: Int
+    ): List<Post>
+
 
     @Multipart
     @POST("/api/post/create")

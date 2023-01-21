@@ -1,7 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.di
 
 import com.google.gson.Gson
-import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
+import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_post.data.repository.PostRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.repository.PostRepository
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.CreatePostUseCase

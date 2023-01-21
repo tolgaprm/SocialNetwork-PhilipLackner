@@ -1,7 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.core.presentation.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,7 +21,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -34,6 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.*
@@ -65,10 +65,12 @@ fun Post(
                     onPostClick()
                 }
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.back),
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(post.imageUrl)
+                    .build(),
                 contentDescription = "Post image",
                 contentScale = ContentScale.Crop
             )
@@ -144,8 +146,10 @@ fun Post(
         }
 
         if (showProfileImage) {
-            Image(
-                painterResource(id = R.drawable.avatar),
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(post.profilePictureProfile)
+                    .build(),
                 contentDescription = stringResource(id = R.string.profile_picture),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

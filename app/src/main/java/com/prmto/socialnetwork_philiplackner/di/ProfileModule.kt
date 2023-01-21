@@ -1,6 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.di
 
 import com.google.gson.Gson
+import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.ProfileApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.repository.ProfileRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
@@ -30,18 +31,19 @@ object ProfileModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(api: ProfileApi, gson: Gson): ProfileRepository {
-        return ProfileRepositoryImpl(api, gson)
+    fun provideProfileRepository(profileApi: ProfileApi, gson: Gson, postApi: PostApi): ProfileRepository {
+        return ProfileRepositoryImpl(profileApi, postApi, gson)
     }
 
     @Provides
     @Singleton
     fun provideProfileUseCases(repository: ProfileRepository): ProfileUseCases {
         return ProfileUseCases(
-            GetProfileUseCase(repository),
-            GetSkillsUseCase(repository),
-            UpdateProfileUseCase(repository),
-            SetSkillsSelectedUseCase()
+            getProfile = GetProfileUseCase(repository),
+            getSkills = GetSkillsUseCase(repository),
+            updateProfile = UpdateProfileUseCase(repository),
+            setSkillsSelected = SetSkillsSelectedUseCase(),
+            getPostsForProfile = GetPostsForProfileUseCase(repository)
         )
     }
 }

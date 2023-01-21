@@ -7,13 +7,13 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.R
+import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_post.data.paging.PostSource
-import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreatePostRequest
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.repository.PostRepository
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +34,10 @@ class PostRepositoryImpl @Inject constructor(
                 pageSize = Constants.PAGE_SIZE_POST
             ),
             pagingSourceFactory = {
-                PostSource(postApi)
+                PostSource(
+                    postApi = postApi,
+                    source = PostSource.Source.Follows
+                )
             }
         ).flow
 

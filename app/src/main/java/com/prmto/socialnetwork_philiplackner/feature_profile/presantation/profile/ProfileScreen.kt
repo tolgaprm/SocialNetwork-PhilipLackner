@@ -1,6 +1,5 @@
 package com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,8 +28,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
@@ -49,12 +50,14 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 @ExperimentalCoilApi
 fun ProfileScreen(
-    userId:String,
+    userId: String,
     scaffoldState: ScaffoldState,
     profilePictureSize: Dp = ProfilePictureSizeLarge,
     viewModel: ProfileViewModel = hiltViewModel(),
     onNavigate: (String) -> Unit = {}
 ) {
+
+    val posts = viewModel.posts.collectAsLazyPagingItems()
 
     val lazyListState = rememberLazyListState()
     val toolbarState = viewModel.toolbarState.value
@@ -147,24 +150,23 @@ fun ProfileScreen(
                     )
                 }
             }
-            items(20) {
+            items(posts) { post ->
                 Spacer(modifier = Modifier.height(SpaceSmall))
                 Post(
                     post = Post(
-                        username = "Tolga Pirim",
-                        imageUrl = "",
-                        description = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed\n" +
-                                "diam nonumy eirmod tempor invidunt ut labore et dolore \n" +
-                                "magna aliquyam erat, sed diam voluptua",
-                        profilePictureProfile = "",
-                        likeCount = 20,
-                        commentCount = 50
+                        username = viewModel.state.value.profile?.username ?: "",
+                        imageUrl = post?.imageUrl ?: "",
+                        description = post?.description ?: "",
+                        profilePictureProfile = post?.profilePictureProfile ?: "",
+                        likeCount = post?.likeCount ?: 0,
+                        commentCount = post?.commentCount ?: 0
                     ),
                     onPostClick = {
                         onNavigate(Screen.PostDetailScreen.route)
                     },
                     showProfileImage = false
                 )
+
             }
 
         }
@@ -201,12 +203,10 @@ fun ProfileScreen(
                     shouldShowLinkedInUrl = profile.linkedInUrl != null && profile.linkedInUrl.isNotBlank()
                 )
 
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = ImageRequest.Builder(context)
-                            .data(profile.profilePictureUrl)
-                            .build()
-                    ),
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(profile.profilePictureUrl)
+                        .build(),
                     contentDescription = stringResource(id = R.string.profile_picture),
                     modifier = Modifier
                         .align(CenterHorizontally)

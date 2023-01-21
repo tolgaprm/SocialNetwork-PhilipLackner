@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
@@ -82,16 +83,15 @@ fun BannerSection(
         ) {
             topSkills.forEach { skillUrl ->
                 Spacer(modifier = Modifier.width(SpaceSmall))
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current).data(data = skillUrl.imageUrl)
-                            .apply(block = fun ImageRequest.Builder.() {
-                                crossfade(true)
-                            }).build(), imageLoader = ImageLoader.Builder(LocalContext.current)
-                            .components {
-                                add(SvgDecoder.Factory())
-                            }.build()
-                    ),
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(data = skillUrl.imageUrl)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                        }).build(), imageLoader = ImageLoader.Builder(LocalContext.current)
+                        .components {
+                            add(SvgDecoder.Factory())
+                        }.build(),
                     contentDescription = null,
                     modifier = Modifier.height(iconSize)
                 )
