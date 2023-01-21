@@ -7,6 +7,7 @@ import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.UpdateProfileData
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
+import com.prmto.socialnetwork_philiplackner.feature_profile.domain.util.ProfileConstants
 
 class UpdateProfileUseCase(
     private val repository: ProfileRepository
@@ -23,17 +24,38 @@ class UpdateProfileUseCase(
                 )
             )
         }
-        val isValidGitHubUrl = updateProfileData.gitHubUrl.startsWith("https://github.com")
-                || updateProfileData.gitHubUrl.startsWith("http://github.com")
-                || updateProfileData.gitHubUrl.startsWith("github.com")
 
-        val gitHubPattern ="[http|https]".toRegex()
-
-        if (!isValidGitHubUrl) {
-            return Resource.Error(
-                uiText = UiText.StringResource(R.string.error_invalid_github_url)
-            )
+        if (updateProfileData.gitHubUrl.isNotEmpty()) {
+            val isValidGitHubUrl =
+                ProfileConstants.GITHUB_PROFILE_REGEX.matches(updateProfileData.gitHubUrl)
+            if (!isValidGitHubUrl) {
+                return Resource.Error(
+                    uiText = UiText.StringResource(R.string.error_invalid_github_url)
+                )
+            }
         }
+
+        if (updateProfileData.instagramUrl.isNotBlank()) {
+            val isValidInstagramUrl =
+                ProfileConstants.INSTAGRAM_PROFILE_REGEX.matches(updateProfileData.instagramUrl)
+            if (!isValidInstagramUrl) {
+                return Resource.Error(
+                    uiText = UiText.StringResource(R.string.error_invalid_instagram_url)
+                )
+            }
+        }
+
+        if (updateProfileData.linkedInUrl.isNotEmpty()) {
+            val isValidLinkedInUrl =
+                ProfileConstants.LINKED_IN_PROFILE_REGEX.matches(updateProfileData.linkedInUrl)
+            if (!isValidLinkedInUrl) {
+                return Resource.Error(
+                    uiText = UiText.StringResource(R.string.error_invalid_linkedin_url)
+                )
+            }
+        }
+
+
         return repository.updateProfile(
             updateProfileData = updateProfileData,
             profilePictureUri = profilePictureUri,
