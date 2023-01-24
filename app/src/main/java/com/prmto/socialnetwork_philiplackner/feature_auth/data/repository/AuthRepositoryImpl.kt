@@ -3,6 +3,7 @@ package com.prmto.socialnetwork_philiplackner.feature_auth.data.repository
 import android.content.SharedPreferences
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.util.Constants.KEY_JWT_TOKEN
+import com.prmto.socialnetwork_philiplackner.core.util.Constants.KEY_USER_ID
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
@@ -57,9 +58,10 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val response = authApi.login(request)
             if (response.successful) {
-                response.data?.token?.let { token ->
+                response.data?.let { authResponse ->
                     sharedPreferences.edit()
-                        .putString(KEY_JWT_TOKEN, token)
+                        .putString(KEY_JWT_TOKEN, authResponse.token)
+                        .putString(KEY_USER_ID, authResponse.userId)
                         .apply()
                 }
                 Resource.Success(data = Unit)

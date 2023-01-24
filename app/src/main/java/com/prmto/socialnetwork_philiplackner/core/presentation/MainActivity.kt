@@ -10,6 +10,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.Navigation
@@ -29,33 +30,43 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
                     val scaffoldState = rememberScaffoldState()
                     StandardScaffold(
                         navController = navController,
-                        showBottomBar = listOf(
-                            Screen.MainFeedScreen.route,
-                            Screen.ChatScreen.route,
-                            Screen.ActivityScreen.route,
-                            Screen.ProfileScreen.route
-                        ).any {
-                            currentDestination?.route == it
-                        },
+                        showBottomBar = shouldShowBottomBar(backStackEntry = navBackStackEntry),
                         scaffoldState = scaffoldState,
                         modifier = Modifier.fillMaxSize(),
                         onFabClick = {
                             navController.navigate(Screen.CreatePostScreen.route)
                         }
                     ) {
-                        Navigation(navController,scaffoldState)
+                        Navigation(navController, scaffoldState)
                     }
 
 
                 }
             }
         }
+    }
+
+    private fun shouldShowBottomBar(backStackEntry: NavBackStackEntry?): Boolean {
+        val doesRouteMatch = listOf(
+            Screen.MainFeedScreen.route,
+            Screen.ChatScreen.route,
+            Screen.ActivityScreen.route
+        ).any {
+            backStackEntry?.destination?.route == it
+        }
+
+        val isOwnProfile =
+            backStackEntry?.destination?.route == "${Screen.ProfileScreen.route}?userId={userId}" &&
+                    backStackEntry.arguments?.getString("userId") == null
+
+        return doesRouteMatch || isOwnProfile
     }
 }
 
