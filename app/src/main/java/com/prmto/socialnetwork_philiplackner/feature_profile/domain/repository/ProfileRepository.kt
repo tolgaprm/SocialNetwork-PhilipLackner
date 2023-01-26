@@ -3,6 +3,7 @@ package com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository
 import android.net.Uri
 import androidx.paging.PagingData
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
+import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Profile
@@ -23,5 +24,10 @@ interface ProfileRepository {
 
     suspend fun getSkills(): Resource<List<Skill>>
 
+    suspend fun searchUSer(query: String): Resource<List<UserItem>>
+
+    suspend fun followUser(userId: String): SimpleResource
+
+    suspend fun unFollowUser(userId: String): SimpleResource
 
 }

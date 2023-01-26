@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_profile.domain.model
+package com.prmto.socialnetwork_philiplackner.core.domain.models
 
 data class UserItem(
     val userId: String,

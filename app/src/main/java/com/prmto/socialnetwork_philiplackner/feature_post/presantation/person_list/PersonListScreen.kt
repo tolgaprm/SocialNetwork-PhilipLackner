@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.prmto.socialnetwork_philiplackner.R
@@ -50,7 +51,7 @@ fun PersonListScreen(
                     user = User(
                         userId = "",
                         profilePictureUrl = "",
-                        username = "Tolga Pirim",
+                        userName = "Tolga Pirim",
                         bio = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed\n" +
                                 "diam nonumy eirmod tempor invidunt ut labore et dolore \n" +
                                 "magna aliquyam erat, sed diam voluptua",
@@ -64,7 +65,8 @@ fun PersonListScreen(
                             contentDescription = null,
                             tint = MaterialTheme.colors.onBackground
                         )
-                    }
+                    },
+                    context = LocalContext.current
                 )
             }
         }

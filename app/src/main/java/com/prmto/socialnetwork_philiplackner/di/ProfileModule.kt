@@ -31,7 +31,11 @@ object ProfileModule {
 
     @Provides
     @Singleton
-    fun provideProfileRepository(profileApi: ProfileApi, gson: Gson, postApi: PostApi): ProfileRepository {
+    fun provideProfileRepository(
+        profileApi: ProfileApi,
+        gson: Gson,
+        postApi: PostApi
+    ): ProfileRepository {
         return ProfileRepositoryImpl(profileApi, postApi, gson)
     }
 
@@ -43,7 +47,9 @@ object ProfileModule {
             getSkills = GetSkillsUseCase(repository),
             updateProfile = UpdateProfileUseCase(repository),
             setSkillsSelected = SetSkillsSelectedUseCase(),
-            getPostsForProfile = GetPostsForProfileUseCase(repository)
+            getPostsForProfile = GetPostsForProfileUseCase(repository),
+            searchUser = SearchUserUseCase(repository),
+            toggleFollowStateForUser = ToggleFollowStateForUserUseCase(repository)
         )
     }
 }

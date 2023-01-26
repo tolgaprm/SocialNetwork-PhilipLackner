@@ -9,7 +9,7 @@ data class Profile(
     val followerCount: Int,
     val followingCount: Int,
     val postCount: Int,
-    val bannerUrl: String,
+    val bannerUrl: String?,
     val profilePictureUrl: String,
     val topSkills: List<Skill>,
     val gitHubUrl: String?,
@@ -22,7 +22,7 @@ data class Profile(
         return User(
             userId = userId,
             profilePictureUrl = profilePictureUrl,
-            username = username,
+            userName = username,
             bio = bio,
             followerCount = followerCount,
             followingCount = followingCount,

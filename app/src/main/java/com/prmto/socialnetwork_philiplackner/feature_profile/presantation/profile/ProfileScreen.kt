@@ -51,7 +51,7 @@ import kotlinx.coroutines.flow.collectLatest
 @ExperimentalCoilApi
 fun ProfileScreen(
     scaffoldState: ScaffoldState,
-    userId: String?=null,
+    userId: String? = null,
     profilePictureSize: Dp = ProfilePictureSizeLarge,
     viewModel: ProfileViewModel = hiltViewModel(),
     onNavigate: (String) -> Unit = {}
@@ -106,7 +106,7 @@ fun ProfileScreen(
     }
 
     LaunchedEffect(key1 = true) {
-      viewModel.getProfile(userId = userId)
+        viewModel.getProfile(userId = userId)
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.ShowSnackbar -> {
@@ -142,6 +142,7 @@ fun ProfileScreen(
                     ProfileHeaderSection(
                         user = profile.toUser(),
                         isOwnProfile = profile.isOwnProfile,
+                        isFollowing = profile.isFollowing,
                         onEditClick = {
                             onNavigate(
                                 Screen.EditProfileScreen.route + "/${profile.userId}"

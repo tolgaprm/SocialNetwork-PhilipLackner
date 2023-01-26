@@ -1,19 +1,19 @@
-package com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.response
+package com.prmto.socialnetwork_philiplackner.core.data.dto.response
 
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.UserItem
+import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 
-data class UserResponseItem(
+data class UserItemDto(
     val userId: String,
     val userName: String,
     val profilePictureUrl: String,
     val bio: String,
     val isFollowing: Boolean
 ) {
-    fun toUser(): UserItem {
+    fun toUserItem(): UserItem {
         return UserItem(
             userId = userId,
             profilePictureUrl = profilePictureUrl,
-            userName = userId,
+            userName = userName,
             bio = bio,
             isFollowing = isFollowing
         )

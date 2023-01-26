@@ -1,6 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.core.presentation.components
 
-import androidx.compose.foundation.Image
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -9,12 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.User
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfilePictureSizeSmall
@@ -25,6 +26,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 fun UserProfileItem(
     modifier: Modifier = Modifier,
     user: User,
+    context: Context,
     onItemClick: () -> Unit = {},
     onActionItemClick: () -> Unit = {},
     actionIcon: @Composable () -> Unit = {}
@@ -42,11 +44,14 @@ fun UserProfileItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
+            AsyncImage(
+                model = ImageRequest.Builder(
+                    context = context
+                ).data(user.profilePictureUrl)
+                    .build(),
                 modifier = Modifier
                     .size(ProfilePictureSizeSmall)
                     .clip(CircleShape),
-                painter = painterResource(id = R.drawable.avatar),
                 contentDescription = stringResource(id = R.string.profile_picture),
                 contentScale = ContentScale.Crop
             )
@@ -59,7 +64,7 @@ fun UserProfileItem(
                     .weight(8f)
             ) {
                 Text(
-                    text = user.username,
+                    text = user.userName,
                     style = MaterialTheme.typography.body1.copy(
                         fontWeight = FontWeight.Bold
                     )

@@ -35,7 +35,7 @@ class ProfileViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     val posts = profileUseCases.getPostsForProfile(
-        userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
+        userId = savedStateHandle.get<String>("userId") ?: getOwnUserId(        )
     ).cachedIn(viewModelScope)
 
 

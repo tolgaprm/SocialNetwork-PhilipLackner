@@ -24,6 +24,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
     user: User,
+    isFollowing: Boolean = true,
     isOwnProfile: Boolean = true,
     onEditClick: () -> Unit = {}
 ) {
@@ -41,7 +42,7 @@ fun ProfileHeaderSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = user.username,
+                text = user.userName,
                 style = MaterialTheme.typography.h1.copy(
                     fontSize = 24.sp
                 ),
@@ -63,7 +64,7 @@ fun ProfileHeaderSection(
         }
 
         Spacer(modifier = Modifier.height(SpaceMedium))
-        if (user.bio.isNotBlank()){
+        if (user.bio.isNotBlank()) {
             Text(
                 text = user.bio,
                 style = MaterialTheme.typography.body2.copy(
@@ -75,7 +76,8 @@ fun ProfileHeaderSection(
         Spacer(modifier = Modifier.height(SpaceLarge))
         ProfileStats(
             user = user,
-            isOwnProfile = isOwnProfile
+            isOwnProfile = isOwnProfile,
+            isFollowing = isFollowing
         )
 
     }

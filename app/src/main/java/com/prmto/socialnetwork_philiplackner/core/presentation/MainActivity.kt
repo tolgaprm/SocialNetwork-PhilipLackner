@@ -56,8 +56,8 @@ class MainActivity : ComponentActivity() {
     private fun shouldShowBottomBar(backStackEntry: NavBackStackEntry?): Boolean {
         val doesRouteMatch = listOf(
             Screen.MainFeedScreen.route,
-            Screen.ChatScreen.route,
-            Screen.ActivityScreen.route
+            Screen.ActivityScreen.route,
+            Screen.ChatScreen.route
         ).any {
             backStackEntry?.destination?.route == it
         }

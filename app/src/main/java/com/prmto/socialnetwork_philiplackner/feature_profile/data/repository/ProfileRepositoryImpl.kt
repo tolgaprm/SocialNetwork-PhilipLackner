@@ -9,12 +9,14 @@ import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
+import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_post.data.paging.PostSource
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.ProfileApi
+import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.request.FollowUpdateRequest
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Profile
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Skill
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.UpdateProfileData
@@ -132,5 +134,68 @@ class ProfileRepositoryImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun searchUSer(query: String): Resource<List<UserItem>> {
+        return try {
+            val response = profileApi.searchUser(query = query)
+            Resource.Success(
+                data = response.map { it.toUserItem() }
+            )
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
+    }
+
+    override suspend fun followUser(userId: String): SimpleResource {
+        return try {
+            val response = profileApi.followUser(
+                request = FollowUpdateRequest(followedUserId = userId)
+            )
+            if (response.successful) {
+                Resource.Success(Unit)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(uiText = UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.error_unknown))
+            }
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
+    }
+
+    override suspend fun unFollowUser(userId: String): SimpleResource {
+        return try {
+            val response = profileApi.unFollowUser(
+                userId = userId
+            )
+            if (response.successful) {
+                Resource.Success(Unit)
+            } else {
+                response.message?.let { msg ->
+                    Resource.Error(uiText = UiText.DynamicString(msg))
+                } ?: Resource.Error(UiText.StringResource(R.string.error_unknown))
+            }
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
     }
 }

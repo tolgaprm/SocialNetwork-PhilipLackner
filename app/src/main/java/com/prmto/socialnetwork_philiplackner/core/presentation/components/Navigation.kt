@@ -127,6 +127,7 @@ fun Navigation(
 
         composable(Screen.SearchScreen.route) {
             SearchScreen(
+                scaffoldState = scaffoldState,
                 onNavigate = navController::navigate,
                 onNavigateUp = { navController.navigateUp() }
             )
