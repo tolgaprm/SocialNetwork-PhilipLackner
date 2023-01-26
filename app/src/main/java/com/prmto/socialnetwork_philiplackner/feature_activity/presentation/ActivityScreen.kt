@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity
+package com.prmto.socialnetwork_philiplackner.feature_activity.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,14 +10,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Activity
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
-import com.prmto.socialnetwork_philiplackner.core.util.DateFormatUtil
-import com.prmto.socialnetwork_philiplackner.feature_activity.domain.ActivityAction
-import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity.components.ActivityItem
-import kotlin.random.Random
+import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.components.ActivityItem
 
 @Composable
 fun ActivityScreen(
@@ -25,6 +24,7 @@ fun ActivityScreen(
     viewModel: ActivityViewModel = hiltViewModel()
 ) {
 
+    val activitiesPagingItems = viewModel.activities.collectAsLazyPagingItems()
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -36,7 +36,7 @@ fun ActivityScreen(
                     color = MaterialTheme.colors.onBackground
                 )
             },
-            onNavigateUp =onNavigateUp,
+            onNavigateUp = onNavigateUp,
             modifier = Modifier.fillMaxWidth(),
             showBackArrow = false,
         )
@@ -49,21 +49,19 @@ fun ActivityScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(SpaceMedium)
         ) {
-            items(20) {
-                ActivityItem(
-                    activity = Activity(
-                        username = "Tolga Pirim",
-                        actionType = if (Random.nextInt(2) == 0) {
-                            ActivityAction.LikedPost
-                        } else {
-                            ActivityAction.CommentedOnPost
-                        },
-                        formattedTime = DateFormatUtil.timestampsToFormattedString(
-                            timestamp = System.currentTimeMillis(),
-                            pattern = "MMM dd, HH:mm"
+            items(activitiesPagingItems) { activity ->
+                activity?.let {
+                    ActivityItem(
+                        activity = Activity(
+                            userId = activity.userId,
+                            username = activity.username,
+                            activityType = activity.activityType,
+                            formattedTime = activity.formattedTime,
+                            parentId = activity.parentId
                         )
                     )
-                )
+                }
+
             }
         }
     }

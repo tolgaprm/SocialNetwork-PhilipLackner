@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity.components
+package com.prmto.socialnetwork_philiplackner.feature_activity.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Activity
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
-import com.prmto.socialnetwork_philiplackner.feature_activity.domain.ActivityAction
+import com.prmto.socialnetwork_philiplackner.feature_activity.domain.ActivityType
 
 @Composable
 fun ActivityItem(
@@ -34,6 +34,7 @@ fun ActivityItem(
         backgroundColor = MaterialTheme.colors.onSurface,
         elevation = 5.dp
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -41,21 +42,27 @@ fun ActivityItem(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val fillerText = when (activity.actionType) {
-                is ActivityAction.LikedPost ->
+            val fillerText = when (activity.activityType) {
+                is ActivityType.LikedPost ->
                     stringResource(id = R.string.liked)
-                is ActivityAction.CommentedOnPost ->
+                is ActivityType.CommentedOnPost ->
                     stringResource(id = R.string.commented_on)
-                is ActivityAction.FollowedYou ->
+                is ActivityType.FollowedUser ->
                     stringResource(id = R.string.followed_you)
+                is ActivityType.LikedComment -> {
+                    stringResource(id = R.string.liked)
+                }
             }
 
-            val actionText = when (activity.actionType) {
-                is ActivityAction.LikedPost ->
+            val actionText = when (activity.activityType) {
+                is ActivityType.LikedPost ->
                     stringResource(id = R.string.your_post)
-                is ActivityAction.CommentedOnPost ->
+                is ActivityType.CommentedOnPost ->
                     stringResource(id = R.string.your_post)
-                is ActivityAction.FollowedYou -> ""
+                is ActivityType.FollowedUser -> ""
+                is ActivityType.LikedComment -> {
+                    stringResource(id = R.string.your_comment)
+                }
             }
 
             Text(

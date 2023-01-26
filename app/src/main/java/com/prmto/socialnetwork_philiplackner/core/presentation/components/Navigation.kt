@@ -11,7 +11,7 @@ import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
-import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.activity.ActivityScreen
+import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.login.LoginScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.register.RegisterScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.splash.SplashScreen
