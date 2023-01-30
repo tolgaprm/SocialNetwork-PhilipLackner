@@ -69,7 +69,10 @@ fun Navigation(
         }
 
         composable(Screen.ActivityScreen.route) {
-            ActivityScreen(onNavigateUp = { navController.navigateUp() })
+            ActivityScreen(
+                onNavigateUp = { navController.navigateUp() },
+                onNavigate = navController::navigate
+            )
         }
 
         composable(

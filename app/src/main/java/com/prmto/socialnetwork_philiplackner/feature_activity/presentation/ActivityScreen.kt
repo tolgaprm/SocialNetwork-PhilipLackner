@@ -21,6 +21,7 @@ import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.compo
 @Composable
 fun ActivityScreen(
     onNavigateUp: () -> Unit = {},
+    onNavigate: (String) -> Unit = {},
     viewModel: ActivityViewModel = hiltViewModel()
 ) {
 
@@ -58,7 +59,8 @@ fun ActivityScreen(
                             activityType = activity.activityType,
                             formattedTime = activity.formattedTime,
                             parentId = activity.parentId
-                        )
+                        ),
+                        onNavigate = onNavigate
                     )
                 }
 
