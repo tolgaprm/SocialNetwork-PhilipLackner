@@ -311,7 +311,8 @@ fun PostPreview() {
                 description = "hi Philip!!! Realy enjoying your videos and I learning a lot from those streammings.",
                 profilePictureProfile = "",
                 likeCount = 20,
-                commentCount = 50
+                commentCount = 50,
+                id = ""
             )
         )
     }

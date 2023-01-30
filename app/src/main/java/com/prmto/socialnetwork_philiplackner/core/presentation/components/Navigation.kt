@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
-import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.ActivityScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.login.LoginScreen
@@ -99,17 +98,18 @@ fun Navigation(
                 onPopBackStack = { navController.popBackStack() }
             )
         }
-        composable(Screen.PostDetailScreen.route) {
+        composable(
+            route = Screen.PostDetailScreen.route+"/{postId}",
+            arguments = listOf(
+                navArgument(
+                    name = "postId"
+                ) {
+                    type = NavType.StringType
+                }
+            )
+
+        ) {
             PostDetailScreen(
-                post = Post(
-                    username = "Tolga Pirim",
-                    imageUrl = "",
-                    description = "Lorem ipsum dolor sit amet, consetetur, asdfadsf" + "diam nonumy eirmod tempor invidunt ut fda fdsa" +
-                            "magna aliquyam erat, sed diam voluptua",
-                    profilePictureProfile = "",
-                    likeCount = 20,
-                    commentCount = 50
-                ),
                 onNavigateUp = { navController.navigateUp() }
             )
         }

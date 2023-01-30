@@ -4,9 +4,7 @@ import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_post.data.repository.PostRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.repository.PostRepository
-import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.CreatePostUseCase
-import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.GetPostsFollowsUseCase
-import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
+import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.*
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -44,7 +42,9 @@ object PostModule {
     fun providePostUseCase(repository: PostRepository): PostUseCases {
         return PostUseCases(
             getPostsFollowsUseCase = GetPostsFollowsUseCase(repository),
-            createPostUseCase = CreatePostUseCase(repository)
+            createPostUseCase = CreatePostUseCase(repository),
+            getPostDetails = GetPostDetailsUseCase(repository),
+            getCommentsForPost = GetCommentsForPostUseCase(repository)
         )
     }
 }

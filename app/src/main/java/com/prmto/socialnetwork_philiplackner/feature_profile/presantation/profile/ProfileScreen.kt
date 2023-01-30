@@ -155,6 +155,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(SpaceSmall))
                 Post(
                     post = Post(
+                        id = post?.id ?: "",
                         username = viewModel.state.value.profile?.username ?: "",
                         imageUrl = post?.imageUrl ?: "",
                         description = post?.description ?: "",
@@ -163,7 +164,7 @@ fun ProfileScreen(
                         commentCount = post?.commentCount ?: 0
                     ),
                     onPostClick = {
-                        onNavigate(Screen.PostDetailScreen.route)
+                        onNavigate(Screen.PostDetailScreen.route + "/${post?.id}")
                     },
                     showProfileImage = false
                 )

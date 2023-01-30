@@ -72,6 +72,7 @@ fun MainFeedScreen(
                 items(posts) { post ->
                     Post(
                         post = Post(
+                            id = post?.id ?: "",
                             username = post?.username ?: "",
                             imageUrl = post?.imageUrl ?: "",
                             description = post?.description ?: "",
@@ -80,7 +81,7 @@ fun MainFeedScreen(
                             commentCount = post?.commentCount ?: 0
                         ),
                         onPostClick = {
-                            onNavigate(Screen.PostDetailScreen.route)
+                            onNavigate(Screen.PostDetailScreen.route + "/${post?.id}")
                         }
                     )
                 }
