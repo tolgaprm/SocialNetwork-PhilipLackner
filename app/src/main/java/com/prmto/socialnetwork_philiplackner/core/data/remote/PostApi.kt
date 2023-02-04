@@ -3,6 +3,7 @@ package com.prmto.socialnetwork_philiplackner.core.data.remote
 import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.dto.CommentDto
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreateCommentRequest
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -21,7 +22,6 @@ interface PostApi {
         @Query("pageSize") pageSize: Int
     ): List<Post>
 
-
     @Multipart
     @POST("/api/post/create")
     suspend fun createPost(
@@ -39,6 +39,11 @@ interface PostApi {
     suspend fun getCommentsForPost(
         @Query("postId") postId: String
     ): List<CommentDto>
+
+    @POST("/api/comment/create")
+    suspend fun createComment(
+        @Body request: CreateCommentRequest
+    ): BasicApiResponse<Unit>
 
     companion object {
         val BASE_URL = "http://10.0.2.2:8001"

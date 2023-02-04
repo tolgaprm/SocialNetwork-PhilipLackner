@@ -15,6 +15,7 @@ import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_post.data.paging.PostSource
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreateCommentRequest
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreatePostRequest
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.repository.PostRepository
 import kotlinx.coroutines.flow.Flow
@@ -109,6 +110,32 @@ class PostRepositoryImpl @Inject constructor(
                 it.toComment()
             }
             Resource.Success(data = comments)
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
+    }
+
+    override suspend fun createComment(postId: String, comment: String): SimpleResource {
+        return try {
+            val response = postApi.createComment(
+                request = CreateCommentRequest(
+                    comment = comment,
+                    postId = postId
+                )
+            )
+            if (response.successful){
+                Resource.Success(data = Unit)
+            }else{
+                response.message?.let { msg->
+                    Resource.Error(UiText.DynamicString(msg))
+                }?:Resource.Error(UiText.unknownError())
+            }
         } catch (e: IOException) {
             Resource.Error(
                 uiText = UiText.StringResource(R.string.error_couldnt_reach_server)

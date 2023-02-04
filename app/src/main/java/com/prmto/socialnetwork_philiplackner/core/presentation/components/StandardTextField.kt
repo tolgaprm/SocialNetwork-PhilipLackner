@@ -35,6 +35,7 @@ fun StandardTextField(
     textStyle: TextStyle = TextStyle(
         color = MaterialTheme.colors.onBackground
     ),
+    backgroundColor: Color = MaterialTheme.colors.surface,
     singleLine: Boolean = true,
     leadingIcon: ImageVector? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -63,6 +64,9 @@ fun StandardTextField(
             },
             maxLines = maxlines,
             textStyle = textStyle,
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = backgroundColor
+            ),
             isError = error.isNotEmpty(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType
