@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -43,7 +42,11 @@ import com.prmto.socialnetwork_philiplackner.core.util.Constants.MAX_POST_DESCRI
 fun Post(
     post: Post,
     showProfileImage: Boolean = true,
-    onPostClick: () -> Unit = {}
+    onPostClick: () -> Unit = {},
+    onLikeClick: () -> Unit = {},
+    onCommentClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
+    onUsernameClick: () -> Unit= {}
 ) {
     Box(
         modifier = Modifier
@@ -82,18 +85,10 @@ fun Post(
                 ActionRow(
                     username = post.username,
                     modifier = Modifier.fillMaxWidth(),
-                    onLikeClick = { isLiked ->
-
-                    },
-                    onCommentClick = {
-
-                    },
-                    onShareClick = {
-
-                    },
-                    onUsernameClick = { username ->
-
-                    }
+                    onLikeClick = onLikeClick,
+                    onCommentClick = onCommentClick,
+                    onShareClick = onShareClick,
+                    onUsernameClick = onUsernameClick
                 )
                 Spacer(modifier = Modifier.height(SpaceMedium))
 
@@ -169,7 +164,7 @@ fun EngagementButtons(
     modifier: Modifier = Modifier,
     isLiked: Boolean = false,
     iconSize: Dp = 30.dp,
-    onLikeClick: (Boolean) -> Unit,
+    onLikeClick: () -> Unit,
     onCommentClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
@@ -180,13 +175,13 @@ fun EngagementButtons(
     ) {
         IconButton(
             onClick = {
-                onLikeClick(!isLiked)
+                onLikeClick()
             },
             modifier = Modifier.size(iconSize)
         ) {
             Icon(
                 imageVector = Icons.Filled.Favorite,
-                tint = if (isLiked) Color.Red else TextWhite,
+                tint = if (isLiked) MaterialTheme.colors.primary else TextWhite,
                 contentDescription = if (isLiked) {
                     stringResource(R.string.unlike)
                 } else stringResource(
@@ -232,11 +227,11 @@ fun EngagementButtons(
 fun ActionRow(
     modifier: Modifier = Modifier,
     isLiked: Boolean = false,
-    onLikeClick: (Boolean) -> Unit,
+    onLikeClick: () -> Unit,
     onCommentClick: () -> Unit,
     onShareClick: () -> Unit,
     username: String,
-    onUsernameClick: (String) -> Unit
+    onUsernameClick: () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -251,7 +246,7 @@ fun ActionRow(
             ),
             modifier = Modifier
                 .clickable {
-                    onUsernameClick(username)
+                    onUsernameClick()
                 }
         )
 
@@ -297,25 +292,6 @@ fun ActionsRowPreview() {
         )
     }
 
-}
-
-
-@Preview
-@Composable
-fun PostPreview() {
-    SocialNetworkPhilipLacknerTheme {
-        Post(
-            post = Post(
-                username = "Tolga Pirim",
-                imageUrl = "",
-                description = "hi Philip!!! Realy enjoying your videos and I learning a lot from those streammings.",
-                profilePictureProfile = "",
-                likeCount = 20,
-                commentCount = 50,
-                id = ""
-            )
-        )
-    }
 }
 
 

@@ -26,7 +26,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 fun Comment(
     modifier: Modifier = Modifier,
     comment: Comment,
-    onLikeClick: (Boolean) -> Unit = {}
+    onLikeClick: () -> Unit = {}
 ) {
     Card(
         modifier = modifier,
@@ -49,7 +49,7 @@ fun Comment(
                 ) {
                     AsyncImage(
                         model = comment.profileImageUrl,
-                        contentDescription = stringResource(id = R .string.profile_picture),
+                        contentDescription = stringResource(id = R.string.profile_picture),
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(ProfilePictureSizeSmall),
@@ -71,18 +71,31 @@ fun Comment(
             Spacer(modifier = Modifier.height(SpaceMedium))
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = comment.commentText,
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onBackground,
-                    fontSize = 14.sp,
+                Column(
                     modifier = Modifier.weight(9f)
-                )
+                ) {
+                    Text(
+                        text = comment.commentText,
+                        style = MaterialTheme.typography.body2,
+                        color = MaterialTheme.colors.onBackground,
+                        fontSize = 14.sp,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(SpaceMedium))
+                    Text(
+                        text = stringResource(id = R.string.liked_by_x_people, comment.likeCount),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.body2,
+                        color = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 Spacer(modifier = Modifier.width(SpaceSmall))
                 IconButton(
                     onClick = {
-                        onLikeClick(comment.isLiked)
+                        onLikeClick()
                     },
                     modifier = Modifier.weight(1f)
                 ) {
@@ -99,13 +112,6 @@ fun Comment(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(SpaceMedium))
-            Text(
-                text = stringResource(id = R.string.liked_by_x_people, comment.likeCount),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onBackground
-            )
         }
     }
 }

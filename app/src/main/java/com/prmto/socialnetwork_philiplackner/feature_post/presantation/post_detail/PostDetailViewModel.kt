@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.states.StandardTextFieldState
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
+import com.prmto.socialnetwork_philiplackner.core.util.ParentType
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
@@ -47,7 +48,27 @@ class PostDetailViewModel @Inject constructor(
     fun onEvent(event: PostDetailEvent) {
         when (event) {
             is PostDetailEvent.LikePost -> {
-
+                val post = state.value.post
+                val isLiked = post?.isLiked == true
+                toggleLikeForParent(
+                    parentId = state.value.post?.id ?: return,
+                    parentType = ParentType.Post.type,
+                    isLiked = isLiked,
+                    updateLikeState = {
+                        _state.value = _state.value.copy(
+                            post = post?.copy(
+                                isLiked = !isLiked
+                            )
+                        )
+                    },
+                    defaultLikeStateWhenOnError = {
+                        _state.value = _state.value.copy(
+                            post = post?.copy(
+                                isLiked = isLiked
+                            )
+                        )
+                    }
+                )
             }
             is PostDetailEvent.Comment -> {
                 if (commentTextFieldState.value.text.isBlank()) {
@@ -57,18 +78,65 @@ class PostDetailViewModel @Inject constructor(
                 } else {
                     createComment(
                         postId = savedStateHandle.get<String>("postId") ?: "",
-                        comment = commentTextFieldState.value.text
+                        comment = commentTextFieldState.value.text,
                     )
                 }
             }
             is PostDetailEvent.LikeComment -> {
-
+                val comments = state.value.comments
+                val isLiked = comments.find { it.commentId == event.commentId }?.isLiked == true
+                toggleLikeForParent(
+                    parentId = event.commentId,
+                    parentType = ParentType.Comment.type,
+                    isLiked = isLiked,
+                    updateLikeState = {
+                        _state.value = _state.value.copy(
+                            comments = comments.map {
+                                if (it.commentId == event.commentId) {
+                                    it.copy(isLiked = !isLiked)
+                                } else it
+                            }
+                        )
+                    },
+                    defaultLikeStateWhenOnError = {
+                        _state.value = _state.value.copy(
+                            comments = comments.map {
+                                if (it.commentId == event.commentId) {
+                                    it.copy(isLiked = isLiked)
+                                } else it
+                            }
+                        )
+                    }
+                )
             }
             is PostDetailEvent.SharePost -> {
 
             }
             is PostDetailEvent.EnteredComment -> {
                 _commentTextFieldState.value = StandardTextFieldState(text = event.comment)
+            }
+        }
+    }
+
+    private fun toggleLikeForParent(
+        parentId: String,
+        parentType: Int,
+        isLiked: Boolean,
+        updateLikeState: () -> Unit = {},
+        defaultLikeStateWhenOnError: () -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            updateLikeState()
+            val result = postUseCases.toggleLikeForParent(
+                parentId = parentId,
+                parentType = parentType,
+                isLiked = isLiked
+            )
+            when (result) {
+                is Resource.Success -> Unit
+                is Resource.Error -> {
+                    defaultLikeStateWhenOnError()
+                }
             }
         }
     }

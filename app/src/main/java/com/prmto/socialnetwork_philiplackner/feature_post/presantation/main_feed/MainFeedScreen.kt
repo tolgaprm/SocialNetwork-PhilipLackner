@@ -21,7 +21,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
-import com.prmto.socialnetwork_philiplackner.core.presentation.components.Post
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import kotlinx.coroutines.launch
@@ -70,7 +69,7 @@ fun MainFeedScreen(
             }
             LazyColumn {
                 items(posts) { post ->
-                    Post(
+                    com.prmto.socialnetwork_philiplackner.core.presentation.components.Post(
                         post = Post(
                             id = post?.id ?: "",
                             username = post?.username ?: "",
@@ -78,11 +77,14 @@ fun MainFeedScreen(
                             description = post?.description ?: "",
                             profilePictureProfile = post?.profilePictureProfile ?: "",
                             likeCount = post?.likeCount ?: 0,
-                            commentCount = post?.commentCount ?: 0
+                            commentCount = post?.commentCount ?: 0,
+                            userId = post?.userId ?: "",
+                            isLiked = post?.isLiked ?: false
                         ),
                         onPostClick = {
                             onNavigate(Screen.PostDetailScreen.route + "/${post?.id}")
-                        }
+                        },
+
                     )
                 }
 
