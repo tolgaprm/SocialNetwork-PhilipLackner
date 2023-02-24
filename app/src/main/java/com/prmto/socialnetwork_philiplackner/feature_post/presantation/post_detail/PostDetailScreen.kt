@@ -1,6 +1,7 @@
 package com.prmto.socialnetwork_philiplackner.feature_post.presantation.post_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,13 +30,15 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.*
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
+import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun PostDetailScreen(
     scaffoldState: ScaffoldState,
     viewModel: PostDetailViewModel = hiltViewModel(),
-    onNavigateUp: () -> Unit = {}
+    onNavigateUp: () -> Unit = {},
+    onNavigate: (String) -> Unit
 ) {
 
     val state = viewModel.state.value
@@ -52,6 +55,7 @@ fun PostDetailScreen(
                         message = uiEvent.uiText.asString(context)
                     )
                 }
+                else -> return@collectLatest
             }
         }
     }
@@ -131,6 +135,9 @@ fun PostDetailScreen(
                                     )
                                     Spacer(modifier = Modifier.height(SpaceMedium))
                                     Text(
+                                        modifier = Modifier.clickable {
+                                            onNavigate(Screen.PersonListScreen.route + "/${post.id}")
+                                        },
                                         text = stringResource(
                                             id = R.string.liked_by_x_people, post.likeCount
                                         ),
@@ -170,6 +177,9 @@ fun PostDetailScreen(
                         ), comment = comment,
                     onLikeClick = {
                         viewModel.onEvent(PostDetailEvent.LikeComment(comment.commentId))
+                    },
+                    onLikedByPeopleClick = {
+                        onNavigate(Screen.PersonListScreen.route + "/${comment.commentId}")
                     }
                 )
             }

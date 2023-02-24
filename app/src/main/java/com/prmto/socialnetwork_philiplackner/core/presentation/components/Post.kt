@@ -46,7 +46,7 @@ fun Post(
     onLikeClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
-    onUsernameClick: () -> Unit= {}
+    onUsernameClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -83,7 +83,7 @@ fun Post(
                     .padding(SpaceMedium)
             ) {
                 ActionRow(
-                    username = post.username,
+                    username = post.username ?: "",
                     modifier = Modifier.fillMaxWidth(),
                     onLikeClick = onLikeClick,
                     onCommentClick = onCommentClick,
@@ -101,7 +101,7 @@ fun Post(
                             )
                         ) {
                             append(
-                                LocalContext.current.getString(
+                                " " + LocalContext.current.getString(
                                     R.string.read_more
                                 )
                             )
@@ -143,7 +143,7 @@ fun Post(
         if (showProfileImage) {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(post.profilePictureProfile)
+                    .data(post.profilePictureProfile ?: "")
                     .build(),
                 contentDescription = stringResource(id = R.string.profile_picture),
                 contentScale = ContentScale.Crop,

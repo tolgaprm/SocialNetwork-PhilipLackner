@@ -2,11 +2,11 @@ package com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case
 
 import android.net.Uri
 import com.prmto.socialnetwork_philiplackner.R
+import com.prmto.socialnetwork_philiplackner.core.domain.repository.ProfileRepository
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.UpdateProfileData
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.util.ProfileConstants
 
 class UpdateProfileUseCase(

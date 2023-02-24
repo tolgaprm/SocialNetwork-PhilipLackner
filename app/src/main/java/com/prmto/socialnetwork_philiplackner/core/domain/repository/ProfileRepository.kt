@@ -1,18 +1,21 @@
-package com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository
+package com.prmto.socialnetwork_philiplackner.core.domain.repository
 
 import android.net.Uri
-import androidx.paging.PagingData
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
+import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Profile
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Skill
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.UpdateProfileData
-import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
-    fun getPostsPaged(userId: String): Flow<PagingData<Post>>
+    suspend fun getPostsPaged(
+        page: Int = 0,
+        pageSize: Int = Constants.DEFAULT_PAGE_SIZE,
+        userId: String
+    ): Resource<List<Post>>
 
     suspend fun getProfile(userId: String): Resource<Profile>
 

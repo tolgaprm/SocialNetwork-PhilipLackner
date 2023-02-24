@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.models.User
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardTextField
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.UserProfileItem
@@ -93,25 +92,16 @@ fun SearchScreen(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(SpaceMedium)
                 ) {
-                    items(state.userItems) { userItem ->
+                    items(state.userItems) { user ->
                         var icon by remember { mutableStateOf(Icons.Default.PersonAdd) }
-                        println("USERNAME ${userItem.userName}")
                         UserProfileItem(
-                            user = User(
-                                userId = userItem.userId,
-                                profilePictureUrl = userItem.profilePictureUrl,
-                                userName = userItem.userName,
-                                bio = userItem.bio,
-                                followerCount = 0,
-                                followingCount = 0,
-                                postCount = 0
-                            ),
+                            user = user,
                             context = LocalContext.current,
                             onItemClick = {
-                                onNavigate(Screen.ProfileScreen.route + "?userId=${userItem.userId}")
+                                onNavigate(Screen.ProfileScreen.route + "?userId=${user.userId}")
                             },
                             actionIcon = {
-                                icon = if (userItem.isFollowing) {
+                                icon = if (user.isFollowing) {
                                     Icons.Default.PersonRemove
                                 } else {
                                     Icons.Default.PersonAdd
@@ -119,8 +109,8 @@ fun SearchScreen(
                                 IconButton(onClick = {
                                     viewModel.onEvent(
                                         SearchEvent.ToggleFollowState(
-                                            userId = userItem.userId,
-                                            isFollowing = userItem.isFollowing
+                                            userId = user.userId,
+                                            isFollowing = user.isFollowing
                                         )
                                     )
                                 }) {

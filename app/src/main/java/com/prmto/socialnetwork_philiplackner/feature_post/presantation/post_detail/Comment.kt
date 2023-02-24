@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.feature_post.presantation.post_detail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -26,7 +27,8 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 fun Comment(
     modifier: Modifier = Modifier,
     comment: Comment,
-    onLikeClick: () -> Unit = {}
+    onLikeClick: () -> Unit = {},
+    onLikedByPeopleClick: () -> Unit
 ) {
     Card(
         modifier = modifier,
@@ -40,9 +42,7 @@ fun Comment(
                 .padding(SpaceMedium)
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -64,14 +64,12 @@ fun Comment(
                     )
                 }
                 Text(
-                    text = comment.formattedTime,
-                    style = MaterialTheme.typography.body2
+                    text = comment.formattedTime, style = MaterialTheme.typography.body2
                 )
             }
             Spacer(modifier = Modifier.height(SpaceMedium))
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier.weight(9f)
@@ -85,28 +83,29 @@ fun Comment(
                     )
                     Spacer(modifier = Modifier.height(SpaceMedium))
                     Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onLikedByPeopleClick()
+                            },
                         text = stringResource(id = R.string.liked_by_x_people, comment.likeCount),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.body2,
-                        color = MaterialTheme.colors.onBackground,
-                        modifier = Modifier.fillMaxWidth()
+                        color = MaterialTheme.colors.onBackground
                     )
                 }
                 Spacer(modifier = Modifier.width(SpaceSmall))
                 IconButton(
                     onClick = {
                         onLikeClick()
-                    },
-                    modifier = Modifier.weight(1f)
+                    }, modifier = Modifier.weight(1f)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Favorite,
-                        tint = if (comment.isLiked) {
+                        imageVector = Icons.Default.Favorite, tint = if (comment.isLiked) {
                             MaterialTheme.colors.primary
                         } else {
                             MaterialTheme.colors.onBackground
-                        },
-                        contentDescription = if (comment.isLiked) {
+                        }, contentDescription = if (comment.isLiked) {
                             stringResource(id = R.string.unlike)
                         } else stringResource(id = R.string.like)
                     )

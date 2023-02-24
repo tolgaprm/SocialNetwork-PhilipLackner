@@ -1,6 +1,7 @@
-package com.prmto.socialnetwork_philiplackner.core.data.remote
+package com.prmto.socialnetwork_philiplackner.feature_post.data.remote
 
 import com.prmto.socialnetwork_philiplackner.core.data.dto.response.BasicApiResponse
+import com.prmto.socialnetwork_philiplackner.core.data.dto.response.UserItemDto
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.dto.CommentDto
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreateCommentRequest
@@ -56,6 +57,12 @@ interface PostApi {
         @Query("parentId") parentId: String,
         @Query("parentType") parentType: Int
     ): BasicApiResponse<Unit>
+
+    @GET("/api/like/parent")
+    suspend fun getLikesForParent(
+        @Query("parentId") parentId: String,
+
+    ):List<UserItemDto>
 
     companion object {
         val BASE_URL = "http://10.0.2.2:8001"

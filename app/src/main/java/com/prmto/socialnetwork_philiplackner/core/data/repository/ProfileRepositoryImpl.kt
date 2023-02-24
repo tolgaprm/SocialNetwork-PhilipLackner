@@ -1,27 +1,21 @@
-package com.prmto.socialnetwork_philiplackner.feature_profile.data.repository
+package com.prmto.socialnetwork_philiplackner.core.data.repository
 
 import android.net.Uri
 import androidx.core.net.toFile
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
-import com.prmto.socialnetwork_philiplackner.core.util.Constants
+import com.prmto.socialnetwork_philiplackner.core.domain.repository.ProfileRepository
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
-import com.prmto.socialnetwork_philiplackner.feature_post.data.paging.PostSource
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.ProfileApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.request.FollowUpdateRequest
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Profile
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.Skill
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.model.UpdateProfileData
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
-import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okio.IOException
@@ -122,18 +116,27 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPostsPaged(userId: String): Flow<PagingData<Post>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = Constants.PAGE_SIZE_POST
-            ),
-            pagingSourceFactory = {
-                PostSource(
-                    postApi = postApi,
-                    source = PostSource.Source.Profile(userId = userId)
-                )
-            }
-        ).flow
+    override suspend fun getPostsPaged(
+        page: Int,
+        pageSize: Int,
+        userId: String
+    ): Resource<List<Post>> {
+        return try {
+            val posts = postApi.getPostsForProfile(
+                userId = userId,
+                page = page,
+                pageSize=pageSize
+            )
+            Resource.Success(data = posts)
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
     }
 
     override suspend fun searchUSer(query: String): Resource<List<UserItem>> {

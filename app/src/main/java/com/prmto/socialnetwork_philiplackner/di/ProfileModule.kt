@@ -1,10 +1,11 @@
 package com.prmto.socialnetwork_philiplackner.di
 
 import com.google.gson.Gson
-import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
+import com.prmto.socialnetwork_philiplackner.core.data.repository.ProfileRepositoryImpl
+import com.prmto.socialnetwork_philiplackner.core.domain.repository.ProfileRepository
+import com.prmto.socialnetwork_philiplackner.core.domain.usecase.ToggleFollowStateForUserUseCase
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_profile.data.remote.ProfileApi
-import com.prmto.socialnetwork_philiplackner.feature_profile.data.repository.ProfileRepositoryImpl
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.*
 import dagger.Provides
 import dagger.hilt.InstallIn

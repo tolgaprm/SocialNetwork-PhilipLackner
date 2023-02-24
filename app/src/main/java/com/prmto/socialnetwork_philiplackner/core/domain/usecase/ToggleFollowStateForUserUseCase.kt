@@ -1,9 +1,10 @@
-package com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case
+package com.prmto.socialnetwork_philiplackner.core.domain.usecase
 
+import com.prmto.socialnetwork_philiplackner.core.domain.repository.ProfileRepository
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
-import com.prmto.socialnetwork_philiplackner.feature_profile.domain.repository.ProfileRepository
+import javax.inject.Inject
 
-class ToggleFollowStateForUserUseCase(
+class ToggleFollowStateForUserUseCase @Inject constructor(
     private val repository: ProfileRepository
 ) {
 

@@ -7,14 +7,15 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Comment
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
+import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_post.data.paging.PostSource
+import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.PostApi
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreateCommentRequest
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.CreatePostRequest
 import com.prmto.socialnetwork_philiplackner.feature_post.data.remote.request.LikeUpdateRequest
@@ -187,6 +188,23 @@ class PostRepositoryImpl @Inject constructor(
                     Resource.Error(UiText.DynamicString(msg))
                 } ?: Resource.Error(UiText.unknownError())
             }
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
+    }
+
+    override suspend fun getLikesForParent(parentId: String): Resource<List<UserItem>> {
+        return try {
+            val response = postApi.getLikesForParent(
+                parentId = parentId
+            )
+            Resource.Success(data = response.map { it.toUserItem() })
         } catch (e: IOException) {
             Resource.Error(
                 uiText = UiText.StringResource(R.string.error_couldnt_reach_server)

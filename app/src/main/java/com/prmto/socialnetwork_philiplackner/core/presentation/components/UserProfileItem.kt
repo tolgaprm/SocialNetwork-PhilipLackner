@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.models.User
+import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfilePictureSizeSmall
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
 
@@ -25,8 +25,9 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 @Composable
 fun UserProfileItem(
     modifier: Modifier = Modifier,
-    user: User,
+    user: UserItem,
     context: Context,
+    ownUserId: String = "",
     onItemClick: () -> Unit = {},
     onActionItemClick: () -> Unit = {},
     actionIcon: @Composable () -> Unit = {}
@@ -80,12 +81,15 @@ fun UserProfileItem(
                 )
             }
             Spacer(modifier = Modifier.width(SpaceSmall))
-            IconButton(
-                onClick = onActionItemClick,
-                modifier = Modifier.weight(1f)
-            ) {
-                actionIcon()
+            if (user.userId != ownUserId) {
+                IconButton(
+                    onClick = onActionItemClick,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    actionIcon()
+                }
             }
+
         }
     }
 

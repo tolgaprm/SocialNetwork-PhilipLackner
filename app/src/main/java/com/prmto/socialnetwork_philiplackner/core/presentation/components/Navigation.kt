@@ -22,7 +22,9 @@ import com.prmto.socialnetwork_philiplackner.feature_post.presantation.post_deta
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.edit_profile.EditProfileScreen
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.ProfileScreen
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.search.SearchScreen
+import kotlinx.coroutines.DelicateCoroutinesApi
 
+@DelicateCoroutinesApi
 @ExperimentalCoilApi
 @ExperimentalMaterialApi
 @Composable
@@ -99,7 +101,7 @@ fun Navigation(
             )
         }
         composable(
-            route = Screen.PostDetailScreen.route+"/{postId}",
+            route = Screen.PostDetailScreen.route + "/{postId}",
             arguments = listOf(
                 navArgument(
                     name = "postId"
@@ -111,7 +113,8 @@ fun Navigation(
         ) {
             PostDetailScreen(
                 scaffoldState = scaffoldState,
-                onNavigateUp = { navController.navigateUp() }
+                onNavigateUp = { navController.navigateUp() },
+                onNavigate = navController::navigate
             )
         }
 
@@ -137,9 +140,18 @@ fun Navigation(
             )
         }
 
-        composable(Screen.PersonListScreen.route) {
+        composable(
+            route = Screen.PersonListScreen.route + "/{parentId}",
+            arguments = listOf(
+                navArgument("parentId") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
             PersonListScreen(
-                onNavigateUp = { navController.navigateUp() }
+                scaffoldState = scaffoldState,
+                onNavigateUp = { navController.navigateUp() },
+                onNavigate = navController::navigate
             )
         }
     }

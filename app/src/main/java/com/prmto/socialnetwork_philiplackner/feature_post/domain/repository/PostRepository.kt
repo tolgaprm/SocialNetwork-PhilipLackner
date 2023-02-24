@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.paging.PagingData
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Comment
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
+import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import kotlinx.coroutines.flow.Flow
@@ -27,5 +28,7 @@ interface PostRepository {
     suspend fun likeParent(parentId: String, parentType: Int): SimpleResource
 
     suspend fun unLikeParent(parentId: String, parentType: Int): SimpleResource
+
+    suspend fun getLikesForParent(parentId: String): Resource<List<UserItem>>
 
 }
