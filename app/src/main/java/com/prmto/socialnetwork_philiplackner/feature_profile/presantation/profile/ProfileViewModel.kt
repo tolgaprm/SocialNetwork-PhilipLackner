@@ -9,12 +9,8 @@ import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.usecase.GetOwnUserIdUseCase
 import com.prmto.socialnetwork_philiplackner.core.presentation.PagingState
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
-import com.prmto.socialnetwork_philiplackner.core.util.Event
-import com.prmto.socialnetwork_philiplackner.core.util.ParentType
-import com.prmto.socialnetwork_philiplackner.core.util.Resource
-import com.prmto.socialnetwork_philiplackner.core.util.UiText
+import com.prmto.socialnetwork_philiplackner.core.util.*
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
-import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PostEvent
 import com.prmto.socialnetwork_philiplackner.feature_profile.domain.use_case.ProfileUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +24,7 @@ class ProfileViewModel @Inject constructor(
     private val profileUseCases: ProfileUseCases,
     private val postUseCases: PostUseCases,
     private val getOwnUserId: GetOwnUserIdUseCase,
+    private val postLiker: PostLiker,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -40,10 +37,22 @@ class ProfileViewModel @Inject constructor(
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private var page = 0
     private val _pagingState = mutableStateOf(PagingState<Post>())
     val pagingState: State<PagingState<Post>> = _pagingState
 
+
+    private val paginator = DefaultPaginator(onLoadUpdated = { isLoading ->
+        _pagingState.value = pagingState.value.copy(isLoading = isLoading)
+    }, onRequest = { page ->
+        val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
+        profileUseCases.getPostsForProfile(userId = userId, page = page)
+    }, onSuccess = { posts ->
+        _pagingState.value = pagingState.value.copy(
+            items = pagingState.value.items + posts, endReached = posts.isEmpty()
+        )
+    }, onError = { uiText ->
+        _eventFlow.emit(UiEvent.ShowSnackbar(uiText))
+    })
 
     init {
         loadNextPosts()
@@ -52,39 +61,38 @@ class ProfileViewModel @Inject constructor(
     fun onEvent(event: ProfileEvent) {
         when (event) {
             is ProfileEvent.LikedPost -> {
-                toggleLikeForParent(
-                    parentId = event.postId,
-                    isLiked = event.isLiked
-                )
+                toggleLikeForParent(parentId = event.postId)
             }
         }
     }
 
+    private fun toggleLikeForParent(
+        parentId: String
+    ) {
+        viewModelScope.launch {
+            postLiker.toggleLike(posts = pagingState.value.items,
+                parentId = parentId,
+                onRequest = { isLiked ->
+                    postUseCases.toggleLikeForParent(
+                        parentId = parentId,
+                        parentType = ParentType.Post.type,
+                        isLiked = isLiked
+                    )
+                },
+                onStateUpdated = { posts ->
+                    _pagingState.value = pagingState.value.copy(
+                        items = posts
+                    )
+                }
+            )
+        }
+    }
 
     fun loadNextPosts() {
         viewModelScope.launch {
-            val userId = savedStateHandle.get<String>("userId") ?: getOwnUserId()
-            _pagingState.value = pagingState.value.copy(isLoading = true)
-            when (val result = profileUseCases.getPostsForProfile(userId = userId, page = page)) {
-                is Resource.Success -> {
-                    val posts = result.data ?: emptyList()
-                    _pagingState.value = pagingState.value.copy(
-                        items = pagingState.value.items + posts,
-                        endReached = posts.isEmpty(),
-                        isLoading = false
-                    )
-                    page++
-                }
-                is Resource.Error -> {
-                    _eventFlow.emit(
-                        UiEvent.ShowSnackbar(result.uiText ?: UiText.unknownError())
-                    )
-                    _pagingState.value = pagingState.value.copy(isLoading = false)
-                }
-            }
+            paginator.loadNextItems()
         }
     }
-
 
     fun setExpandedRatio(ratio: Float) {
         _toolbarState.value = _toolbarState.value.copy(
@@ -98,7 +106,6 @@ class ProfileViewModel @Inject constructor(
         )
     }
 
-
     fun getProfile(userId: String?) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
@@ -108,8 +115,7 @@ class ProfileViewModel @Inject constructor(
             when (result) {
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
-                        isLoading = false,
-                        profile = result.data
+                        isLoading = false, profile = result.data
                     )
                 }
                 is Resource.Error -> {
@@ -123,29 +129,4 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
-    private fun toggleLikeForParent(
-        parentId: String,
-        isLiked: Boolean,
-        updateLikeState: () -> Unit = {},
-        defaultLikeStateWhenOnError: () -> Unit = {}
-    ) {
-        viewModelScope.launch {
-            updateLikeState()
-            val result = postUseCases.toggleLikeForParent(
-                parentId = parentId,
-                parentType = ParentType.Post.type,
-                isLiked = isLiked
-            )
-            when (result) {
-                is Resource.Success -> {
-                    _eventFlow.emit(PostEvent.LikedPost)
-                }
-                is Resource.Error -> {
-                    defaultLikeStateWhenOnError()
-                }
-            }
-        }
-    }
-
 }

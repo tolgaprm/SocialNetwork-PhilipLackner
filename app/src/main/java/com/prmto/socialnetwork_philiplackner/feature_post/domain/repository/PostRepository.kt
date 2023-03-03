@@ -1,17 +1,18 @@
 package com.prmto.socialnetwork_philiplackner.feature_post.domain.repository
 
 import android.net.Uri
-import androidx.paging.PagingData
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Comment
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
-import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
 
-    val posts: Flow<PagingData<Post>>
+    suspend fun getPostForFollows(
+        page: Int,
+        pageSize: Int,
+    ): Resource<List<Post>>
 
     suspend fun createPost(
         description: String,

@@ -111,7 +111,7 @@ fun PostDetailScreen(
                                         .padding(SpaceLarge)
                                 ) {
                                     ActionRow(
-                                        username = post.username,
+                                        username = post.username ?: "",
                                         modifier = Modifier.fillMaxWidth(),
                                         onLikeClick = {
                                             viewModel.onEvent(PostDetailEvent.LikePost)
@@ -139,7 +139,7 @@ fun PostDetailScreen(
                                             onNavigate(Screen.PersonListScreen.route + "/${post.id}")
                                         },
                                         text = stringResource(
-                                            id = R.string.liked_by_x_people, post.likeCount
+                                            id = R.string.x_likes, post.likeCount
                                         ),
                                         fontWeight = FontWeight.Bold,
                                         style = MaterialTheme.typography.body2

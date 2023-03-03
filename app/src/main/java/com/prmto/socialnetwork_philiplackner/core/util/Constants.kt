@@ -10,7 +10,7 @@ object Constants {
     const val KEY_JWT_TOKEN = "jwt_token"
     const val KEY_USER_ID="userIdKey"
 
-    const val DEFAULT_PAGE_SIZE=3
+    const val DEFAULT_PAGE_SIZE=20
 
     const val SHARED_PREFERENCES_NAME = "shared_pref"
 

@@ -1,8 +1,5 @@
 package com.prmto.socialnetwork_philiplackner.feature_post.presantation.main_feed
 
 sealed class MainFeedEvent {
-    object LoadMorePosts : MainFeedEvent()
-    object LoadedPage : MainFeedEvent()
-
-    data class LikedPost(val postId: String, val isLiked: Boolean) : MainFeedEvent()
+    data class LikedPost(val postId: String) : MainFeedEvent()
 }

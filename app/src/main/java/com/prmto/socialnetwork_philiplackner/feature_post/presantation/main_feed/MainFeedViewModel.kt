@@ -4,12 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
+import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
+import com.prmto.socialnetwork_philiplackner.core.presentation.PagingState
+import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
+import com.prmto.socialnetwork_philiplackner.core.util.DefaultPaginator
 import com.prmto.socialnetwork_philiplackner.core.util.Event
 import com.prmto.socialnetwork_philiplackner.core.util.ParentType
-import com.prmto.socialnetwork_philiplackner.core.util.Resource
+import com.prmto.socialnetwork_philiplackner.core.util.PostLiker
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
-import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PostEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -18,67 +20,77 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainFeedViewModel @Inject constructor(
-    private val postUseCases: PostUseCases
+    private val postUseCases: PostUseCases,
+    private val postLiker: PostLiker
 ) : ViewModel() {
 
-    private val _mainFeedState = mutableStateOf(MainFeedState())
-    val mainFeedState: State<MainFeedState> = _mainFeedState
-
-    val posts = postUseCases.getPostsFollowsUseCase().cachedIn(viewModelScope)
+    private val _pagingState = mutableStateOf(PagingState<Post>())
+    val pagingState: State<PagingState<Post>> = _pagingState
 
     private val _eventFlow = MutableSharedFlow<Event>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    private val paginator = DefaultPaginator<Post>(
+        onLoadUpdated = { isLoading ->
+            _pagingState.value = pagingState.value.copy(isLoading = isLoading)
+        },
+        onRequest = { page ->
+            postUseCases.getPostsFollowsUseCase(page)
+        },
+        onSuccess = { posts ->
+            _pagingState.value = pagingState.value.copy(
+                items = pagingState.value.items + posts,
+                endReached = posts.isEmpty()
+            )
+        },
+        onError = { uiText ->
+            _eventFlow.emit(UiEvent.ShowSnackbar(uiText))
+        }
+    )
+
+    init {
+        loadNextPosts()
+    }
+
+    fun loadNextPosts() {
+        viewModelScope.launch {
+            paginator.loadNextItems()
+        }
+    }
+
     fun onEvent(event: MainFeedEvent) {
         when (event) {
-            is MainFeedEvent.LoadMorePosts -> {
-                _mainFeedState.value = _mainFeedState.value.copy(
-                    isLoadingNewPosts = true
-                )
-            }
-            is MainFeedEvent.LoadedPage -> {
-                _mainFeedState.value = _mainFeedState.value.copy(
-                    isLoadingFirstTime = false,
-                    isLoadingNewPosts = false
-                )
-            }
             is MainFeedEvent.LikedPost -> {
                 toggleLikeForParent(
-                    parentId = event.postId,
-                    isLiked = event.isLiked,
-                    updateLikeState = {
-
-                    },
-                    defaultLikeStateWhenOnError = {
-
-                    }
+                    parentId = event.postId
                 )
             }
+
         }
     }
 
     private fun toggleLikeForParent(
-        parentId: String,
-        isLiked: Boolean,
-        updateLikeState: () -> Unit = {},
-        defaultLikeStateWhenOnError: () -> Unit = {}
+        parentId: String
     ) {
         viewModelScope.launch {
-            updateLikeState()
-            val result = postUseCases.toggleLikeForParent(
+            postLiker.toggleLike(posts = pagingState.value.items,
                 parentId = parentId,
-                parentType = ParentType.Post.type,
-                isLiked = isLiked
+                onRequest = { isLiked ->
+                    postUseCases.toggleLikeForParent(
+                        parentId = parentId,
+                        parentType = ParentType.Post.type,
+                        isLiked = isLiked
+                    )
+                },
+                onStateUpdated = { posts ->
+                    _pagingState.value = pagingState.value.copy(
+                        items = posts
+                    )
+                }
             )
-            when (result) {
-                is Resource.Success -> {
-                    _eventFlow.emit(PostEvent.LikedPost)
-                }
-                is Resource.Error -> {
-                    defaultLikeStateWhenOnError()
-                }
-            }
         }
     }
-
 }
+
+
+

@@ -129,7 +129,7 @@ fun ProfileScreen(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 50.dp),
+            contentPadding = PaddingValues(bottom = 90.dp),
             state = lazyListState
         ) {
 
@@ -158,7 +158,6 @@ fun ProfileScreen(
                 if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
                     viewModel.loadNextPosts()
                 }
-                Spacer(modifier = Modifier.height(SpaceSmall))
                 Post(
                     post =post,
                     onPostClick = {
@@ -167,8 +166,7 @@ fun ProfileScreen(
                     onLikeClick = {
                         viewModel.onEvent(
                             ProfileEvent.LikedPost(
-                                post.id,
-                                post.isLiked
+                                post.id
                             )
                         )
                     },

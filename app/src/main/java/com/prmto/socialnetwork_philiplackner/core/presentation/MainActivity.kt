@@ -46,8 +46,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Navigation(navController, scaffoldState)
                     }
-
-
                 }
             }
         }

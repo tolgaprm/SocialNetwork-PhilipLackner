@@ -7,6 +7,8 @@ import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.core.domain.usecase.GetOwnUserIdUseCase
 import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Constants.SHARED_PREFERENCES_NAME
+import com.prmto.socialnetwork_philiplackner.core.util.DefaultPostLiker
+import com.prmto.socialnetwork_philiplackner.core.util.PostLiker
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -41,6 +43,13 @@ object Module {
                     .build()
                 it.proceed(modifiedRequest)
             }.build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun providePostLiker(): PostLiker {
+        return DefaultPostLiker()
     }
 
     @Provides

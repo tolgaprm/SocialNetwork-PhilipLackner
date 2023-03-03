@@ -88,7 +88,7 @@ fun Comment(
                             .clickable {
                                 onLikedByPeopleClick()
                             },
-                        text = stringResource(id = R.string.liked_by_x_people, comment.likeCount),
+                        text = stringResource(id = R.string.x_likes, comment.likeCount),
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.body2,
                         color = MaterialTheme.colors.onBackground
