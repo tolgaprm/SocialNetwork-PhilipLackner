@@ -11,9 +11,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -37,6 +39,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun PostDetailScreen(
     scaffoldState: ScaffoldState,
     viewModel: PostDetailViewModel = hiltViewModel(),
+    shouldShowKeyboard: Boolean,
     onNavigateUp: () -> Unit = {},
     onNavigate: (String) -> Unit
 ) {
@@ -47,7 +50,14 @@ fun PostDetailScreen(
 
     val context = LocalContext.current
 
+    val focusRequester = remember {
+        FocusRequester()
+    }
+
     LaunchedEffect(key1 = true) {
+        if (shouldShowKeyboard){
+            focusRequester.requestFocus()
+        }
         viewModel.eventFlow.collectLatest { uiEvent ->
             when (uiEvent) {
                 is UiEvent.ShowSnackbar -> {
@@ -58,6 +68,7 @@ fun PostDetailScreen(
                 else -> return@collectLatest
             }
         }
+
     }
 
     Column(
@@ -117,7 +128,7 @@ fun PostDetailScreen(
                                             viewModel.onEvent(PostDetailEvent.LikePost)
                                         },
                                         onCommentClick = {
-
+                                            focusRequester.requestFocus()
                                         },
                                         onShareClick = {
                                             viewModel.onEvent(PostDetailEvent.SharePost)
@@ -201,6 +212,7 @@ fun PostDetailScreen(
                 ),
                 modifier = Modifier.weight(1f),
                 hint = stringResource(id = R.string.enter_a_comment),
+                focusRequester = focusRequester
             )
             if (commentState.isLoading) {
                 CircularProgressIndicator(

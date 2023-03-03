@@ -227,7 +227,7 @@ fun EngagementButtons(
 @Composable
 fun ActionRow(
     modifier: Modifier = Modifier,
-    isLiked: Boolean = false,
+    isLiked: Boolean,
     onLikeClick: () -> Unit,
     onCommentClick: () -> Unit,
     onShareClick: () -> Unit,

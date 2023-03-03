@@ -170,6 +170,9 @@ fun ProfileScreen(
                             )
                         )
                     },
+                    onCommentClick = {
+                        onNavigate(Screen.PostDetailScreen.route + "/${post.id}?shouldShowKeyboard=${true}")
+                    },
                     showProfileImage = false
                 )
 

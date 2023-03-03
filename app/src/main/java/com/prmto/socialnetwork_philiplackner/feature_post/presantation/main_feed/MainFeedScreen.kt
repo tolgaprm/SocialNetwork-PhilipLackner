@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,10 +31,7 @@ fun MainFeedScreen(
     onNavigateUp: () -> Unit = {},
     viewModel: MainFeedViewModel = hiltViewModel()
 ) {
-
     val pagingState = viewModel.pagingState.value
-    val scope = rememberCoroutineScope()
-
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
@@ -78,13 +74,13 @@ fun MainFeedScreen(
             }
         )
         Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(contentPadding = PaddingValues(bottom = 90.dp)){
-                itemsIndexed(pagingState.items) {  i, post ->
+            LazyColumn(contentPadding = PaddingValues(bottom = 90.dp)) {
+                itemsIndexed(pagingState.items) { i, post ->
                     if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
                         viewModel.loadNextPosts()
                     }
                     Post(
-                        post =post,
+                        post = post,
                         onPostClick = {
                             onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
                         },
@@ -94,6 +90,9 @@ fun MainFeedScreen(
                                     post.id
                                 )
                             )
+                        },
+                        onCommentClick = {
+                            onNavigate(Screen.PostDetailScreen.route + "/${post.id}?shouldShowKeyboard=${true}")
                         },
                         showProfileImage = false
                     )

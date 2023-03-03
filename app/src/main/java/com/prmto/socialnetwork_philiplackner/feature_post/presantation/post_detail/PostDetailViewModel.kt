@@ -50,6 +50,7 @@ class PostDetailViewModel @Inject constructor(
             is PostDetailEvent.LikePost -> {
                 val post = state.value.post
                 val isLiked = post?.isLiked == true
+                val currentlyLikedCount = post?.likeCount ?: 0
                 toggleLikeForParent(
                     parentId = state.value.post?.id ?: return,
                     parentType = ParentType.Post.type,
@@ -57,14 +58,19 @@ class PostDetailViewModel @Inject constructor(
                     updateLikeState = {
                         _state.value = _state.value.copy(
                             post = post?.copy(
-                                isLiked = !isLiked
+                                isLiked = !isLiked,
+                                likeCount = if (isLiked) {
+                                    post.likeCount - 1
+                                } else post.likeCount + 1
+
                             )
                         )
                     },
                     defaultLikeStateWhenOnError = {
                         _state.value = _state.value.copy(
                             post = post?.copy(
-                                isLiked = isLiked
+                                isLiked = isLiked,
+                                likeCount = currentlyLikedCount
                             )
                         )
                     }
@@ -84,17 +90,24 @@ class PostDetailViewModel @Inject constructor(
             }
             is PostDetailEvent.LikeComment -> {
                 val comments = state.value.comments
-                val isLiked = comments.find { it.commentId == event.commentId }?.isLiked == true
+                val comment = comments.find { it.commentId == event.commentId }
+                val isLiked = comment?.isLiked == true
+                val currentlyLikedCount = comment?.likeCount ?: 0
                 toggleLikeForParent(
                     parentId = event.commentId,
                     parentType = ParentType.Comment.type,
                     isLiked = isLiked,
                     updateLikeState = {
                         _state.value = _state.value.copy(
-                            comments = comments.map {
-                                if (it.commentId == event.commentId) {
-                                    it.copy(isLiked = !isLiked)
-                                } else it
+                            comments = comments.map { comment ->
+                                if (comment.commentId == event.commentId) {
+                                    comment.copy(
+                                        isLiked = !isLiked,
+                                        likeCount = if (isLiked) {
+                                            comment.likeCount - 1
+                                        } else comment.likeCount + 1
+                                    )
+                                } else comment
                             }
                         )
                     },
@@ -102,7 +115,10 @@ class PostDetailViewModel @Inject constructor(
                         _state.value = _state.value.copy(
                             comments = comments.map {
                                 if (it.commentId == event.commentId) {
-                                    it.copy(isLiked = isLiked)
+                                    it.copy(
+                                        isLiked = isLiked,
+                                        likeCount = currentlyLikedCount
+                                    )
                                 } else it
                             }
                         )
