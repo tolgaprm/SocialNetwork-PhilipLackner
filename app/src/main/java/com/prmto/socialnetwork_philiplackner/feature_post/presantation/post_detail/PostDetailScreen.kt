@@ -134,7 +134,7 @@ fun PostDetailScreen(
                                             viewModel.onEvent(PostDetailEvent.SharePost)
                                         },
                                         onUsernameClick = {
-
+                                            onNavigate(Screen.ProfileScreen.route+"?userId=${post.userId}")
                                         },
                                         isLiked = post.isLiked
                                     )
