@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.core.data.repository
 
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.core.net.toFile
 import com.google.gson.Gson
@@ -7,6 +8,7 @@ import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.domain.repository.ProfileRepository
+import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.SimpleResource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
@@ -26,7 +28,8 @@ import javax.inject.Inject
 class ProfileRepositoryImpl @Inject constructor(
     private val profileApi: ProfileApi,
     private val postApi: PostApi,
-    private val gson: Gson
+    private val gson: Gson,
+    private val sharedPreferences: SharedPreferences
 ) : ProfileRepository {
     override suspend fun getProfile(userId: String): Resource<Profile> {
         return try {
@@ -125,7 +128,7 @@ class ProfileRepositoryImpl @Inject constructor(
             val posts = postApi.getPostsForProfile(
                 userId = userId,
                 page = page,
-                pageSize=pageSize
+                pageSize = pageSize
             )
             Resource.Success(data = posts)
         } catch (e: IOException) {
@@ -200,5 +203,11 @@ class ProfileRepositoryImpl @Inject constructor(
                 uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
             )
         }
+    }
+
+    override fun logout() {
+        sharedPreferences.edit()
+            .remove(Constants.KEY_JWT_TOKEN)
+            .apply()
     }
 }

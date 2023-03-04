@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.di
 
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.prmto.socialnetwork_philiplackner.core.data.repository.ProfileRepositoryImpl
 import com.prmto.socialnetwork_philiplackner.core.domain.repository.ProfileRepository
@@ -35,9 +36,10 @@ object ProfileModule {
     fun provideProfileRepository(
         profileApi: ProfileApi,
         gson: Gson,
-        postApi: PostApi
+        postApi: PostApi,
+        sharedPreferences: SharedPreferences
     ): ProfileRepository {
-        return ProfileRepositoryImpl(profileApi, postApi, gson)
+        return ProfileRepositoryImpl(profileApi, postApi, gson, sharedPreferences)
     }
 
     @Provides
@@ -50,7 +52,8 @@ object ProfileModule {
             setSkillsSelected = SetSkillsSelectedUseCase(),
             getPostsForProfile = GetPostsForProfileUseCase(repository),
             searchUser = SearchUserUseCase(repository),
-            toggleFollowStateForUser = ToggleFollowStateForUserUseCase(repository)
+            toggleFollowStateForUser = ToggleFollowStateForUserUseCase(repository),
+            logoutUseCase = LogoutUseCase(repository)
         )
     }
 }

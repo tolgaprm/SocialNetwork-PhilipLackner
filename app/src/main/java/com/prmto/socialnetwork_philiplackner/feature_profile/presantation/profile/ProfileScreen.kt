@@ -6,12 +6,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,8 @@ fun ProfileScreen(
     userId: String? = null,
     profilePictureSize: Dp = ProfilePictureSizeLarge,
     viewModel: ProfileViewModel = hiltViewModel(),
-    onNavigate: (String) -> Unit = {}
+    onNavigate: (String) -> Unit = {},
+    onLogout: () -> Unit
 ) {
 
     val pagingState = viewModel.pagingState.value
@@ -150,6 +152,9 @@ fun ProfileScreen(
                             onNavigate(
                                 Screen.EditProfileScreen.route + "/${profile.userId}"
                             )
+                        },
+                        onLogoutClick = {
+                            viewModel.onEvent(ProfileEvent.ShowLogoutDialog)
                         }
                     )
                 }
@@ -159,7 +164,7 @@ fun ProfileScreen(
                     viewModel.loadNextPosts()
                 }
                 Post(
-                    post =post,
+                    post = post,
                     onPostClick = {
                         onNavigate(Screen.PostDetailScreen.route + "/${post.id}")
                     },
@@ -241,6 +246,43 @@ fun ProfileScreen(
                 )
             }
         }
-
+        if (state.isLogoutDialogVisible) {
+            AlertDialog(
+                onDismissRequest = {
+                    viewModel.onEvent(ProfileEvent.DismissLogoutDialog)
+                },
+                modifier = Modifier.align(Center),
+                title = {
+                    Text(text = stringResource(id = R.string.do_you_want_to_logout))
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            viewModel.onEvent(ProfileEvent.Logout)
+                            viewModel.onEvent(ProfileEvent.DismissLogoutDialog)
+                            onLogout()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.6f)
+                        )
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.yes).uppercase(),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        viewModel.onEvent(ProfileEvent.DismissLogoutDialog)
+                    }) {
+                        Text(
+                            text = stringResource(id = R.string.no).uppercase(),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            )
+        }
     }
 }
