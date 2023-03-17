@@ -18,12 +18,15 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SocialNetworkPhilipLacknerTheme
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SocialNetworkPhilipLacknerTheme {
                 Surface(
@@ -33,8 +36,9 @@ class MainActivity : ComponentActivity() {
 
                     val navController = rememberNavController()
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
+                    navBackStackEntry?.destination
                     val scaffoldState = rememberScaffoldState()
+
                     StandardScaffold(
                         navController = navController,
                         showBottomBar = shouldShowBottomBar(backStackEntry = navBackStackEntry),

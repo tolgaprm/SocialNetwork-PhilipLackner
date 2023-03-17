@@ -40,6 +40,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.sendSharePostIntent
 import com.prmto.socialnetwork_philiplackner.core.util.toPx
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PostEvent
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.components.BannerSection
@@ -55,7 +56,7 @@ fun ProfileScreen(
     profilePictureSize: Dp = ProfilePictureSizeLarge,
     viewModel: ProfileViewModel = hiltViewModel(),
     onNavigate: (String) -> Unit = {},
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
 ) {
 
     val pagingState = viewModel.pagingState.value
@@ -177,6 +178,9 @@ fun ProfileScreen(
                     },
                     onCommentClick = {
                         onNavigate(Screen.PostDetailScreen.route + "/${post.id}?shouldShowKeyboard=${true}")
+                    },
+                    onShareClick = {
+                        context.sendSharePostIntent(postId = post.id)
                     },
                     showProfileImage = false
                 )

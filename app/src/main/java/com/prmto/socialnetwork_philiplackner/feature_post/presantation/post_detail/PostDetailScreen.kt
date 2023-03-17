@@ -33,6 +33,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.*
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.sendSharePostIntent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -41,7 +42,7 @@ fun PostDetailScreen(
     viewModel: PostDetailViewModel = hiltViewModel(),
     shouldShowKeyboard: Boolean,
     onNavigateUp: () -> Unit = {},
-    onNavigate: (String) -> Unit
+    onNavigate: (String) -> Unit,
 ) {
 
     val state = viewModel.state.value
@@ -55,7 +56,7 @@ fun PostDetailScreen(
     }
 
     LaunchedEffect(key1 = true) {
-        if (shouldShowKeyboard){
+        if (shouldShowKeyboard) {
             focusRequester.requestFocus()
         }
         viewModel.eventFlow.collectLatest { uiEvent ->
@@ -131,10 +132,10 @@ fun PostDetailScreen(
                                             focusRequester.requestFocus()
                                         },
                                         onShareClick = {
-                                            viewModel.onEvent(PostDetailEvent.SharePost)
+                                            context.sendSharePostIntent(postId = post.id)
                                         },
                                         onUsernameClick = {
-                                            onNavigate(Screen.ProfileScreen.route+"?userId=${post.userId}")
+                                            onNavigate(Screen.ProfileScreen.route + "?userId=${post.userId}")
                                         },
                                         isLiked = post.isLiked
                                     )

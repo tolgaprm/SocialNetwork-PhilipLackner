@@ -21,6 +21,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.sendSharePostIntent
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PostEvent
 import kotlinx.coroutines.flow.collectLatest
 
@@ -29,7 +30,7 @@ fun MainFeedScreen(
     scaffoldState: ScaffoldState,
     onNavigate: (String) -> Unit = {},
     onNavigateUp: () -> Unit = {},
-    viewModel: MainFeedViewModel = hiltViewModel()
+    viewModel: MainFeedViewModel = hiltViewModel(),
 ) {
     val pagingState = viewModel.pagingState.value
     val context = LocalContext.current
@@ -96,6 +97,9 @@ fun MainFeedScreen(
                         },
                         onUsernameClick = {
                             onNavigate(Screen.ProfileScreen.route + "?userId=${post.userId}")
+                        },
+                        onShareClick = {
+                            context.sendSharePostIntent(postId = post.id)
                         },
                         showProfileImage = false
                     )

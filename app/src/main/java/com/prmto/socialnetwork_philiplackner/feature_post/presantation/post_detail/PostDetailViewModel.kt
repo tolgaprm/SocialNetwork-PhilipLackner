@@ -125,9 +125,6 @@ class PostDetailViewModel @Inject constructor(
                     }
                 )
             }
-            is PostDetailEvent.SharePost -> {
-
-            }
             is PostDetailEvent.EnteredComment -> {
                 _commentTextFieldState.value = StandardTextFieldState(text = event.comment)
             }

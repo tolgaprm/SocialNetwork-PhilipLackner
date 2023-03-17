@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.core.presentation.components
 
+import android.content.Intent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
@@ -8,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import coil.annotation.ExperimentalCoilApi
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.feature_activity.presentation.ActivityScreen
@@ -30,7 +32,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 @Composable
 fun Navigation(
     navController: NavHostController,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) {
     NavHost(
         navController = navController,
@@ -119,6 +121,12 @@ fun Navigation(
                 ) {
                     type = NavType.BoolType
                     defaultValue = false
+                }
+            ),
+            deepLinks = listOf(
+                navDeepLink {
+                    action = Intent.ACTION_VIEW
+                    uriPattern = "https://prmcoding.com/{postId}"
                 }
             )
 
