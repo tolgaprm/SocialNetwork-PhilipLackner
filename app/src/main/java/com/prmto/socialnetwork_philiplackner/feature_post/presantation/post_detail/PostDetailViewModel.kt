@@ -11,6 +11,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.util.ParentType
 import com.prmto.socialnetwork_philiplackner.core.util.Resource
 import com.prmto.socialnetwork_philiplackner.core.util.UiText
+import com.prmto.socialnetwork_philiplackner.feature_auth.domain.use_case.AuthenticateUseCase
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
 import com.prmto.socialnetwork_philiplackner.feature_post.util.CommentError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
+    private val authUseCases: AuthenticateUseCase,
     private val postUseCases: PostUseCases,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(PostDetailState())
@@ -35,10 +37,15 @@ class PostDetailViewModel @Inject constructor(
     private val _commentState = mutableStateOf(CommentState())
     val commentState: State<CommentState> = _commentState
 
+    private var isUserLoggedIn = false
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
     init {
+        viewModelScope.launch {
+            isUserLoggedIn = authUseCases() is Resource.Success
+        }
         savedStateHandle.get<String>("postId")?.let { postId ->
             loadPostDetails(postId = postId)
             loadCommentForPost(postId = postId)
@@ -136,9 +143,14 @@ class PostDetailViewModel @Inject constructor(
         parentType: Int,
         isLiked: Boolean,
         updateLikeState: () -> Unit = {},
-        defaultLikeStateWhenOnError: () -> Unit = {}
+        defaultLikeStateWhenOnError: () -> Unit = {},
     ) {
         viewModelScope.launch {
+            if (!isUserLoggedIn || authUseCases() is Resource.Error) {
+                _eventFlow.emit(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_not_logged_in)))
+                return@launch
+            }
+            isUserLoggedIn = true
             updateLikeState()
             val result = postUseCases.toggleLikeForParent(
                 parentId = parentId,
@@ -154,8 +166,14 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
+
     private fun createComment(postId: String, comment: String) {
         viewModelScope.launch {
+            if (!isUserLoggedIn || authUseCases() is Resource.Error) {
+                _eventFlow.emit(UiEvent.ShowSnackbar(UiText.StringResource(R.string.error_not_logged_in)))
+                return@launch
+            }
+            isUserLoggedIn = true
             _commentState.value = CommentState(isLoading = true)
             val result = postUseCases.createComment(
                 postId = postId,
@@ -230,5 +248,4 @@ class PostDetailViewModel @Inject constructor(
             }
         }
     }
-
 }

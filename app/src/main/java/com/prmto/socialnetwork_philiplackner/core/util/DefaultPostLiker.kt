@@ -7,7 +7,7 @@ class DefaultPostLiker : PostLiker {
         posts: List<Post>,
         parentId: String,
         onRequest: suspend (Boolean) -> SimpleResource,
-        onStateUpdated: (List<Post>) -> Unit
+        onStateUpdated: (List<Post>) -> Unit,
     ) {
         val post = posts.find { it.id == parentId }
         val currentlyLiked = post?.isLiked == true
@@ -38,7 +38,7 @@ class DefaultPostLiker : PostLiker {
         posts: List<Post>,
         parentId: String,
         currentlyLiked: Boolean,
-        onStateUpdated: (List<Post>) -> Unit
+        onStateUpdated: (List<Post>) -> Unit,
     ) {
         val newPosts = posts.map { post ->
             if (post.id == parentId) {
@@ -58,7 +58,7 @@ class DefaultPostLiker : PostLiker {
         parentId: String,
         currentlyLiked: Boolean,
         currentlyLikeCount: Int,
-        onStateUpdated: (List<Post>) -> Unit
+        onStateUpdated: (List<Post>) -> Unit,
     ) {
         val oldPosts = posts.map { post ->
             if (post.id == parentId) {
