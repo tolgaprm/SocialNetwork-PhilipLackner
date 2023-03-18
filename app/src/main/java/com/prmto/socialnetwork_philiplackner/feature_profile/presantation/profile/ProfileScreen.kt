@@ -42,7 +42,6 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.core.util.sendSharePostIntent
 import com.prmto.socialnetwork_philiplackner.core.util.toPx
-import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PostEvent
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.components.BannerSection
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.components.ProfileHeaderSection
 import kotlinx.coroutines.flow.collectLatest
@@ -91,7 +90,9 @@ fun ProfileScreen(
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
                 val delta = available.y
-                if (delta > 0 && lazyListState.firstVisibleItemIndex != 0) {
+                val shouldNotScroll =
+                    delta > 0 && lazyListState.firstVisibleItemIndex != 0 || viewModel.pagingState.value.items.isEmpty()
+                if (shouldNotScroll) {
                     return Offset.Zero
                 }
                 val newOffset = viewModel.toolbarState.value.toolbarOffsetY + delta
@@ -108,7 +109,6 @@ fun ProfileScreen(
     }
 
     LaunchedEffect(key1 = true) {
-        viewModel.setExpandedRatio(1f)
         viewModel.getProfile(userId = userId)
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -116,9 +116,6 @@ fun ProfileScreen(
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.uiText.asString(context)
                     )
-                }
-                is PostEvent.LikedPost -> {
-
                 }
             }
         }

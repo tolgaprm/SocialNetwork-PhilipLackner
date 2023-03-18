@@ -22,7 +22,6 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.core.util.sendSharePostIntent
-import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PostEvent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -40,9 +39,6 @@ fun MainFeedScreen(
             when (event) {
                 is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.uiText.asString(context))
-                }
-                is PostEvent.LikedPost -> {
-
                 }
             }
         }
