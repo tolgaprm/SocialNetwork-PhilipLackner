@@ -45,7 +45,6 @@ object Module {
             }.build()
     }
 
-
     @Provides
     @Singleton
     fun providePostLiker(): PostLiker {

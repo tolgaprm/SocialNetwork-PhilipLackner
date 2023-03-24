@@ -1,78 +1,86 @@
-package com.prmto.socialnetwork_philiplackner.core.presentation.components
+package com.prmto.socialnetwork_philiplackner.feature_chat.presentation.components
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.prmto.socialnetwork_philiplackner.R
-import com.prmto.socialnetwork_philiplackner.core.domain.models.UserItem
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfilePictureSizeSmall
+import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
+import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Chat
 
 @ExperimentalMaterialApi
+@ExperimentalCoilApi
 @Composable
-fun UserProfileItem(
+fun ChatItem(
+    item: Chat,
     modifier: Modifier = Modifier,
-    user: UserItem,
-    context: Context,
-    ownUserId: String = "",
-    onItemClick: () -> Unit = {},
-    onActionItemClick: () -> Unit = {},
-    actionIcon: @Composable () -> Unit = {}
+    onItemClick: (Chat) -> Unit,
 ) {
+    val context = LocalContext.current
+
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
-        onClick = onItemClick,
+        onClick = {
+            onItemClick(item)
+        },
         elevation = 5.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(SpaceSmall),
+                .padding(
+                    vertical = SpaceSmall,
+                    horizontal = SpaceMedium
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AsyncImage(
-                model = ImageRequest.Builder(
-                    context = context
-                ).data(user.profilePictureUrl)
+                model = ImageRequest.Builder(context)
+                    .data(item.remoteUserProfileUrl)
                     .build(),
+                contentDescription = null,
                 modifier = Modifier
                     .size(ProfilePictureSizeSmall)
-                    .clip(CircleShape),
-                contentDescription = stringResource(id = R.string.profile_picture),
-                contentScale = ContentScale.Crop
+                    .clip(CircleShape)
             )
-
-            Spacer(modifier = Modifier.width(SpaceSmall))
-
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .weight(8f)
+                    .padding(horizontal = SpaceSmall)
+                    .weight(1f)
             ) {
-                Text(
-                    text = user.userName,
-                    style = MaterialTheme.typography.body1.copy(
-                        fontWeight = FontWeight.Bold
+                Row(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = item.remoteUsername,
+                        style = MaterialTheme.typography.body1.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.weight(1f)
                     )
-                )
+                    Spacer(modifier = Modifier.width(SpaceSmall))
+                    Text(text = item.lastMessageFormattedTime)
+                }
                 Spacer(modifier = Modifier.height(SpaceSmall))
                 Text(
-                    text = user.bio,
+                    text = item.lastMessage,
                     style = MaterialTheme.typography.body2,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2,
@@ -81,17 +89,6 @@ fun UserProfileItem(
                     )
                 )
             }
-            Spacer(modifier = Modifier.width(SpaceSmall))
-            if (user.userId != ownUserId) {
-                IconButton(
-                    onClick = onActionItemClick,
-                    modifier = Modifier.weight(1f)
-                ) {
-                    actionIcon()
-                }
-            }
-
         }
     }
-
 }

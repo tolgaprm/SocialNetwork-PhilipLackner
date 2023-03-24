@@ -27,6 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.ActionRow
+import com.prmto.socialnetwork_philiplackner.core.presentation.components.SendTextField
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardTextField
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.*
@@ -197,49 +198,18 @@ fun PostDetailScreen(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .background(MaterialTheme.colors.surface)
-                .fillMaxWidth()
-                .padding(SpaceLarge), verticalAlignment = Alignment.CenterVertically
-        ) {
-            StandardTextField(
-                text = commentTextFieldState.text,
-                onValueChange = {
-                    viewModel.onEvent(PostDetailEvent.EnteredComment(it))
-                },
-                backgroundColor = MaterialTheme.colors.background.copy(
-                    alpha = 0.6f
-                ),
-                modifier = Modifier.weight(1f),
-                hint = stringResource(id = R.string.enter_a_comment),
-                focusRequester = focusRequester
-            )
-            if (commentState.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(horizontal = 12.dp)
-                        .size(24.dp),
-                    strokeWidth = 2.dp
-                )
-            } else {
-                IconButton(
-                    onClick = {
-                        viewModel.onEvent(PostDetailEvent.Comment)
-                    }, enabled = commentTextFieldState.error == null
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Send,
-                        contentDescription = stringResource(id = R.string.send_comment),
-                        tint = if (commentTextFieldState.error == null) {
-                            MaterialTheme.colors.primary
-                        } else {
-                            MaterialTheme.colors.background
-                        }
-                    )
-                }
-            }
-        }
+        SendTextField(
+            state = viewModel.commentTextFieldState.value,
+            onValueChange = {
+                viewModel.onEvent(PostDetailEvent.EnteredComment(it))
+            },
+            onSend = {
+                viewModel.onEvent(PostDetailEvent.Comment)
+            },
+            hint = stringResource(id = R.string.enter_a_comment),
+            isLoading = viewModel.commentState.value.isLoading,
+            focusRequester = focusRequester
+        )
 
     }
 }

@@ -17,6 +17,7 @@ import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.login.Log
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.register.RegisterScreen
 import com.prmto.socialnetwork_philiplackner.feature_auth.presantation.splash.SplashScreen
 import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.chat.ChatScreen
+import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message.MessageScreen
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.create_post.CreatePostScreen
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.main_feed.MainFeedScreen
 import com.prmto.socialnetwork_philiplackner.feature_post.presantation.person_list.PersonListScreen
@@ -71,7 +72,18 @@ fun Navigation(
         }
 
         composable(Screen.ChatScreen.route) {
-            ChatScreen(navController = navController)
+            ChatScreen(
+                onNavigateUp = navController::navigateUp,
+                onNavigate = navController::navigate,
+            )
+        }
+
+        composable(Screen.MessagesScreen.route) {
+            MessageScreen(
+                chatId = "",
+                onNavigateUp = navController::navigateUp,
+                onNavigate = navController::navigate,
+            )
         }
 
         composable(Screen.ActivityScreen.route) {
