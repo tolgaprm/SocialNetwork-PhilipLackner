@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_chat.presentation.components
+package com.prmto.socialnetwork_philiplackner.feature_chat.presentation.chat
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -76,7 +76,7 @@ fun ChatItem(
                         modifier = Modifier.weight(1f)
                     )
                     Spacer(modifier = Modifier.width(SpaceSmall))
-                    Text(text = item.lastMessageFormattedTime)
+                    Text(text = item.timestamp.toString())
                 }
                 Spacer(modifier = Modifier.height(SpaceSmall))
                 Text(

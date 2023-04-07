@@ -1,11 +1,11 @@
-package com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.ws.model
+package com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.model
 
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Message
 import java.text.DateFormat
 import java.util.*
 
 
-data class WsMessage(
+data class WsServerMessage(
     val fromId: String,
     val toId: String,
     val text: String,

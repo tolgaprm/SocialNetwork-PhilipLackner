@@ -1,4 +1,4 @@
-package com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.ws.util
+package com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.util
 
 
 import com.tinder.scarlet.Stream

@@ -1,19 +1,20 @@
 package com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message
 
-
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.prmto.socialnetwork_philiplackner.core.domain.states.StandardTextFieldState
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
+import com.prmto.socialnetwork_philiplackner.feature_chat.domain.use_case.ChatUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
-
 @HiltViewModel
-class MessageViewModel @Inject constructor() : ViewModel() {
+class MessageViewModel @Inject constructor(
+    private val chatUseCases: ChatUseCases,
+) : ViewModel() {
 
     private val _messageTextFieldState = mutableStateOf(StandardTextFieldState())
     val messageTextFieldState: State<StandardTextFieldState> = _messageTextFieldState
@@ -33,6 +34,9 @@ class MessageViewModel @Inject constructor() : ViewModel() {
             }
             is MessageEvent.SendMessage -> {
 
+                _messageTextFieldState.value = messageTextFieldState.value.copy(
+                    text = ""
+                )
             }
         }
     }
