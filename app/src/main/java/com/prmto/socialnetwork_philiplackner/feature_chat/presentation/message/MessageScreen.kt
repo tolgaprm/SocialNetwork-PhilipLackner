@@ -3,7 +3,7 @@ package com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -23,44 +23,27 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.Standa
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.DarkerGreen
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfilePictureSizeSmall
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
-import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Message
 import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message.components.OwnMessage
 import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message.components.RemoteMessage
+import okio.ByteString.Companion.decodeBase64
+import java.nio.charset.Charset
 
 @ExperimentalCoilApi
 @Composable
 fun MessageScreen(
-    chatId: String,
+    remoteUsername: String,
+    encodedRemoteUserProfilePictureUrl: String,
+    remoteUserId: String,
     onNavigateUp: () -> Unit = {},
     onNavigate: (String) -> Unit = {},
     viewModel: MessageViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val messages = remember {
-        listOf(
-            Message(
-                fromId = "",
-                toId = "",
-                text = "Hello World!",
-                formattedTime = "11:29",
-                chatId = ""
-            ),
-            Message(
-                fromId = "",
-                toId = "",
-                text = "How are you?",
-                formattedTime = "11:29",
-                chatId = "",
-            ),
-            Message(
-                fromId = "",
-                toId = "",
-                text = "Hello World!",
-                formattedTime = "11:29",
-                chatId = "",
-            ),
-        )
+    val decodedRemoteUserProfilePictureUrl = remember {
+        encodedRemoteUserProfilePictureUrl.decodeBase64()?.string(Charset.defaultCharset())
     }
+    val pagingState = viewModel.pagingState.value
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -70,7 +53,7 @@ fun MessageScreen(
             title = {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
-                        .data("http://10.0.2.2:8001/profile_pictures/438a8b02-9c6e-4f3b-815f-d35fb0bb451d.jpeg")
+                        .data(decodedRemoteUserProfilePictureUrl)
                         .build(),
                     contentDescription = null,
                     modifier = Modifier
@@ -79,7 +62,7 @@ fun MessageScreen(
                 )
                 Spacer(modifier = Modifier.width(SpaceMedium))
                 Text(
-                    text = "Tolga Pirim",
+                    text = remoteUsername,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.onBackground
                 )
@@ -94,20 +77,27 @@ fun MessageScreen(
                 verticalArrangement = Arrangement.spacedBy(SpaceMedium),
                 contentPadding = PaddingValues(SpaceMedium)
             ) {
-                items(messages) { message ->
-                    RemoteMessage(
-                        message = message.text,
-                        formattedTime = message.formattedTime,
-                        color = MaterialTheme.colors.surface,
-                        textColor = MaterialTheme.colors.onBackground
-                    )
-                    Spacer(modifier = Modifier.height(SpaceMedium))
-                    OwnMessage(
-                        message = message.text,
-                        formattedTime = message.formattedTime,
-                        color = DarkerGreen,
-                        textColor = MaterialTheme.colors.onBackground
-                    )
+                itemsIndexed(pagingState.items) { i, message ->
+                    if (i >= pagingState.items.size - 1 && !pagingState.endReached && !pagingState.isLoading) {
+                        viewModel.loadNextMessages()
+                    }
+                    if (message.fromId == remoteUserId) {
+                        RemoteMessage(
+                            message = message.text,
+                            formattedTime = message.formattedTime,
+                            color = MaterialTheme.colors.surface,
+                            textColor = MaterialTheme.colors.onBackground
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.height(SpaceMedium))
+                        OwnMessage(
+                            message = message.text,
+                            formattedTime = message.formattedTime,
+                            color = DarkerGreen,
+                            textColor = MaterialTheme.colors.onBackground
+                        )
+                    }
+
                 }
             }
             SendTextField(

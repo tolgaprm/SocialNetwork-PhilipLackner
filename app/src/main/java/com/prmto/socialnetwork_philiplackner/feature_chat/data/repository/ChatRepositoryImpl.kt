@@ -36,6 +36,30 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getMessagesForChat(
+        chatId: String,
+        page: Int,
+        pageSize: Int,
+    ): Resource<List<Message>> {
+        return try {
+            val messages = chatApi.getMessagesForChat(
+                page = page,
+                pageSize = pageSize,
+                chatId = chatId
+            ).map { it.toMessage() }
+            Resource.Success(data = messages)
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
+    }
+
+
     override fun observeChatEvents(): Flow<WebSocket.Event> {
         return chatService.observeEvents()
     }

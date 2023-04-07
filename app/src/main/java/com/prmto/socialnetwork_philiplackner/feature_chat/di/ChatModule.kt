@@ -79,7 +79,8 @@ object ChatModule {
             sendMessage = SendMessage(chatRepository),
             observeChatEvents = ObserveChatEvents(chatRepository),
             observeMessages = ObserveMessages(chatRepository),
-            getChatForUser = GetChatForUser(chatRepository)
+            getChatForUser = GetChatForUser(chatRepository),
+            getMessagesForChat = GetMessagesForChat(chatRepository)
         )
     }
 }

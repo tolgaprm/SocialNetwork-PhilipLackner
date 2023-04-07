@@ -5,4 +5,5 @@ data class ChatUseCases(
     val observeChatEvents: ObserveChatEvents,
     val observeMessages: ObserveMessages,
     val getChatForUser: GetChatForUser,
+    val getMessagesForChat: GetMessagesForChat,
 )

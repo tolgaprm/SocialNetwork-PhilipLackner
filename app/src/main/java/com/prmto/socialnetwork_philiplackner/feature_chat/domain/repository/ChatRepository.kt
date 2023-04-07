@@ -9,6 +9,12 @@ import kotlinx.coroutines.flow.Flow
 interface ChatRepository {
     suspend fun getChatsForUser(): Resource<List<Chat>>
 
+    suspend fun getMessagesForChat(
+        chatId: String,
+        page: Int,
+        pageSize: Int,
+    ): Resource<List<Message>>
+
     fun observeChatEvents(): Flow<WebSocket.Event>
 
     fun observeMessages(): Flow<Message>

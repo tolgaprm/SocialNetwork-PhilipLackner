@@ -79,18 +79,30 @@ fun Navigation(
         }
 
         composable(
-            Screen.MessagesScreen.route + "/{chatId}/{remoteUserId}",
+            Screen.MessagesScreen.route + "/{chatId}/{remoteUserId}/{remoteUsername}/{remoteUserProfilePictureUrl}",
             arguments = listOf(
                 navArgument("chatId") {
                     type = NavType.StringType
                 },
                 navArgument("remoteUserId") {
                     type = NavType.StringType
-                }
+                },
+                navArgument("remoteUsername") {
+                    type = NavType.StringType
+                },
+                navArgument("remoteUserProfilePictureUrl") {
+                    type = NavType.StringType
+                },
             )
         ) {
+            val remoteUserName = it.arguments?.getString("remoteUsername")!!
+            val remoteUserProfilePictureUrl =
+                it.arguments?.getString("remoteUserProfilePictureUrl")!!
+            val remoteUserId = it.arguments?.getString("remoteUserId")!!
             MessageScreen(
-                chatId = "",
+                remoteUsername = remoteUserName,
+                encodedRemoteUserProfilePictureUrl = remoteUserProfilePictureUrl,
+                remoteUserId = remoteUserId,
                 onNavigateUp = navController::navigateUp,
                 onNavigate = navController::navigate,
             )

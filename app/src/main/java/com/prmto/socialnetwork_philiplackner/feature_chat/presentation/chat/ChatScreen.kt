@@ -40,7 +40,14 @@ fun ChatScreen(
                 ChatItem(
                     item = chat,
                     onItemClick = {
-                        onNavigate(Screen.MessagesScreen.route + "/${chat.chatId}/${chat.remoteUserId}")
+                        onNavigate(
+                            Screen.MessagesScreen.route + "/${chat.chatId}/${chat.remoteUserId}/${chat.remoteUsername}/${
+                                android.util.Base64.encodeToString(
+                                    chat.remoteUserProfileUrl.encodeToByteArray(),
+                                    0
+                                )
+                            }"
+                        )
                     }
                 )
             }
