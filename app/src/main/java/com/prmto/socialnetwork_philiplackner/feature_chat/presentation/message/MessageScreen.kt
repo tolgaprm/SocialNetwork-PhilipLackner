@@ -22,6 +22,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.components.SendTe
 import com.prmto.socialnetwork_philiplackner.core.presentation.components.StandardToolbar
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.DarkerGreen
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfilePictureSizeSmall
+import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceLarge
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message.components.OwnMessage
 import com.prmto.socialnetwork_philiplackner.feature_chat.presentation.message.components.RemoteMessage
@@ -74,7 +75,7 @@ fun MessageScreen(
             LazyColumn(
                 modifier = Modifier
                     .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(SpaceMedium),
+                verticalArrangement = Arrangement.spacedBy(SpaceLarge),
                 contentPadding = PaddingValues(SpaceMedium)
             ) {
                 itemsIndexed(pagingState.items) { i, message ->
@@ -89,7 +90,6 @@ fun MessageScreen(
                             textColor = MaterialTheme.colors.onBackground
                         )
                     } else {
-                        Spacer(modifier = Modifier.height(SpaceMedium))
                         OwnMessage(
                             message = message.text,
                             formattedTime = message.formattedTime,

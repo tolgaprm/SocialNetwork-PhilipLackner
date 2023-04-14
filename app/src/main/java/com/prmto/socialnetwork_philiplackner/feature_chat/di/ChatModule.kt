@@ -2,6 +2,7 @@ package com.prmto.socialnetwork_philiplackner.feature_chat.di
 
 import android.app.Application
 import com.google.gson.Gson
+import com.prmto.socialnetwork_philiplackner.core.util.Constants
 import com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.ChatApi
 import com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.ChatService
 import com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.util.CustomGsonMessageAdapter
@@ -11,7 +12,9 @@ import com.prmto.socialnetwork_philiplackner.feature_chat.domain.repository.Chat
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.use_case.*
 import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
+import com.tinder.scarlet.retry.LinearBackoffStrategy
 import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
+import com.tinder.streamadapter.coroutines.CoroutinesStreamAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,14 +30,14 @@ import javax.inject.Singleton
 object ChatModule {
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Provides
     @Singleton
-    fun provideScarlet(app: Application, okHttpClient: OkHttpClient, gson: Gson): Scarlet {
+    fun provideScarlet(application: Application,okHttpClient: OkHttpClient, gson: Gson): Scarlet {
         return Scarlet.Builder()
-            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.1.20:8001/api/chat/websocket"))
             .addMessageAdapterFactory(CustomGsonMessageAdapter.Factory(gson))
-            .addStreamAdapterFactory(FlowStreamAdapter.Factory)
+            .addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
+            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.1.20:8001/api/chat/websocket?userId=64141688a4a31728827a3185"))
+            .backoffStrategy(LinearBackoffStrategy(Constants.RECONNECT_INTERVAL))
             .build()
     }
 

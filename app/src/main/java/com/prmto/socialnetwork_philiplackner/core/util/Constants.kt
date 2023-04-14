@@ -15,4 +15,6 @@ object Constants {
     const val SHARED_PREFERENCES_NAME = "shared_pref"
 
     const val PAGE_SIZE_POST = 20
+
+    const val RECONNECT_INTERVAL = 5000L
 }

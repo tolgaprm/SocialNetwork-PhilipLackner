@@ -17,6 +17,7 @@ import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -68,6 +69,7 @@ class MessageViewModel @Inject constructor(
     init {
         loadNextMessages()
         observeChatEvents()
+        observeChatMessages()
     }
 
     fun loadNextMessages() {
@@ -77,12 +79,13 @@ class MessageViewModel @Inject constructor(
     }
 
     private fun observeChatMessages() {
-        chatUseCases.observeMessages()
-            .onEach { message ->
+        viewModelScope.launch {
+            chatUseCases.observeMessages().collect{ message ->
                 pagingState.value = pagingState.value.copy(
                     items = pagingState.value.items + message
                 )
-            }.launchIn(viewModelScope)
+            }
+        }
     }
 
     private fun observeChatEvents() {

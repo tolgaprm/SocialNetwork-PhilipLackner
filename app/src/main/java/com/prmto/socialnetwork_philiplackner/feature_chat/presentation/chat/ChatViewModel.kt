@@ -33,11 +33,13 @@ class ChatViewModel @Inject constructor(
             state.value = state.value.copy(isLoading = true)
             when (val result = chatUseCases.getChatForUser()) {
                 is Resource.Success -> {
+                    println("Chat "+result.data)
                     state.value = state.value.copy(
                         chats = result.data ?: emptyList(),
                         isLoading = false
                     )
                 }
+
                 is Resource.Error -> {
                     _eventFlow.emit(UiEvent.ShowSnackbar(result.uiText ?: UiText.unknownError()))
                 }
