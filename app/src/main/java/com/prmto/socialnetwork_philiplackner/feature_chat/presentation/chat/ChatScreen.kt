@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.feature_chat.presentation.chat
 
+import android.util.Base64
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,14 +41,7 @@ fun ChatScreen(
                 ChatItem(
                     item = chat,
                     onItemClick = {
-                        onNavigate(
-                            Screen.MessagesScreen.route + "/${chat.chatId}/${chat.remoteUserId}/${chat.remoteUsername}/${
-                                android.util.Base64.encodeToString(
-                                    chat.remoteUserProfileUrl.encodeToByteArray(),
-                                    0
-                                )
-                            }"
-                        )
+                        onNavigate(Screen.MessagesScreen.route + "/${chat.remoteUserId}/${chat.remoteUsername}/${Base64.encodeToString(chat.remoteUserProfileUrl.encodeToByteArray(), 0)}?chatId=${chat.chatId}")
                     }
                 )
             }

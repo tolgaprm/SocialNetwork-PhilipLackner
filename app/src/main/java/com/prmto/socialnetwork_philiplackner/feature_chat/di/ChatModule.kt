@@ -32,10 +32,9 @@ object ChatModule {
     @Singleton
     fun provideScarlet(app: Application, okHttpClient: OkHttpClient, gson: Gson): Scarlet {
         return Scarlet.Builder()
-            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.0.2:8001/api/chat/websocket"))
+            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.1.20:8001/api/chat/websocket"))
             .addMessageAdapterFactory(CustomGsonMessageAdapter.Factory(gson))
             .addStreamAdapterFactory(FlowStreamAdapter.Factory)
-            .lifecycle(AndroidLifecycle.ofApplicationForeground(app))
             .build()
     }
 

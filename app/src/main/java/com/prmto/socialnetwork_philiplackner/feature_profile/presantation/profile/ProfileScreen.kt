@@ -1,5 +1,6 @@
 package com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile
 
+import android.util.Base64
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -153,6 +154,12 @@ fun ProfileScreen(
                         },
                         onLogoutClick = {
                             viewModel.onEvent(ProfileEvent.ShowLogoutDialog)
+                        },
+                        onMessageClick = {
+                            val encodedProfilePictureUrl = Base64.encodeToString(profile.profilePictureUrl.encodeToByteArray(), 0)
+                            onNavigate(
+                                Screen.MessagesScreen.route + "/${profile.userId}/${profile.username}/$encodedProfilePictureUrl"
+                            )
                         }
                     )
                 }
@@ -213,9 +220,9 @@ fun ProfileScreen(
                     },
                     bannerUrl = profile.bannerUrl,
                     topSkills = profile.topSkills,
-                    shouldShowGitHub = profile.gitHubUrl != null && profile.gitHubUrl.isNotBlank(),
-                    shouldShowInstagram = profile.instagramUrl != null && profile.instagramUrl.isNotBlank(),
-                    shouldShowLinkedInUrl = profile.linkedInUrl != null && profile.linkedInUrl.isNotBlank()
+                    shouldShowGitHub = !profile.gitHubUrl.isNullOrBlank(),
+                    shouldShowInstagram = !profile.instagramUrl.isNullOrBlank(),
+                    shouldShowLinkedInUrl = !profile.linkedInUrl.isNullOrBlank()
                 )
 
                 AsyncImage(
