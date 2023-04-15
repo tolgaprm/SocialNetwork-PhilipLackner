@@ -31,18 +31,16 @@ object ChatModule {
 
 
     @Provides
-    @Singleton
     fun provideScarlet(application: Application,okHttpClient: OkHttpClient, gson: Gson): Scarlet {
         return Scarlet.Builder()
             .addMessageAdapterFactory(CustomGsonMessageAdapter.Factory(gson))
             .addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
-            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.1.20:8001/api/chat/websocket?userId=64141688a4a31728827a3185"))
+            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.1.20:8001/api/chat/websocket"))
             .backoffStrategy(LinearBackoffStrategy(Constants.RECONNECT_INTERVAL))
             .build()
     }
 
     @Provides
-    @Singleton
     fun provideChatService(scarlet: Scarlet): ChatService {
         return scarlet.create()
     }
@@ -61,7 +59,6 @@ object ChatModule {
     }
 
     @Provides
-    @Singleton
     fun provideChatRepository(
         chatService: ChatService,
         chatApi: ChatApi,
@@ -73,7 +70,6 @@ object ChatModule {
     }
 
     @Provides
-    @Singleton
     fun provideChatUseCases(
         chatRepository: ChatRepository,
     ): ChatUseCases {
