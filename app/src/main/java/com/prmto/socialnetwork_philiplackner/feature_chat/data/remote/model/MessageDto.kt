@@ -1,6 +1,8 @@
 package com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.model
 
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Message
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 data class MessageDto(
     val fromId: String,
@@ -15,7 +17,10 @@ data class MessageDto(
             fromId = fromId,
             toId = toId,
             text = text,
-            formattedTime = timestamp.toString(),
+            formattedTime = SimpleDateFormat(
+                "HH:mm",
+                Locale.getDefault()
+            ).format(timestamp),
             chatId = chatId
         )
     }

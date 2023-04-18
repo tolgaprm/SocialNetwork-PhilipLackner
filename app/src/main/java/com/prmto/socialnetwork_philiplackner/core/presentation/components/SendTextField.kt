@@ -28,6 +28,7 @@ fun SendTextField(
     onValueChange: (String) -> Unit,
     onSend: () -> Unit,
     hint: String = "",
+    candSendMessage: Boolean = true,
     isLoading: Boolean = false,
     focusRequester: FocusRequester = FocusRequester(),
 ) {
@@ -57,11 +58,11 @@ fun SendTextField(
         } else {
             IconButton(
                 onClick = onSend,
-                enabled = state.error == null
+                enabled = state.error == null || !candSendMessage
             ) {
                 Icon(
                     imageVector = Icons.Default.Send,
-                    tint = if (state.error == null) {
+                    tint = if (state.error == null && candSendMessage) {
                         MaterialTheme.colors.primary
                     } else MaterialTheme.colors.background,
                     contentDescription = stringResource(id = R.string.send_comment)

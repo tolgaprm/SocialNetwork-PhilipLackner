@@ -15,9 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -130,6 +128,7 @@ fun MessageScreen(
             }
             SendTextField(
                 state = viewModel.messageTextFieldState.value,
+                candSendMessage = viewModel.state.value.canSendMessage,
                 onValueChange = {
                     viewModel.onEvent(MessageEvent.EnteredMessage(it))
                 },

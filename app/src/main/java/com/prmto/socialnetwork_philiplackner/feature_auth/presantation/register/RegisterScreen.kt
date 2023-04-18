@@ -6,8 +6,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -30,6 +33,7 @@ import com.prmto.socialnetwork_philiplackner.core.util.Screen
 import com.prmto.socialnetwork_philiplackner.feature_auth.util.AuthError
 import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
@@ -45,10 +49,13 @@ fun RegisterScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = true) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(key1 = keyboardController) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.ShowSnackbar -> {
+                    keyboardController?.hide()
                     scaffoldState.snackbarHostState.showSnackbar(
                         event.uiText.asString(context),
                         duration = SnackbarDuration.Short
@@ -94,9 +101,11 @@ fun RegisterScreen(
                     AuthError.FieldEmpty -> {
                         stringResource(id = R.string.error_field_empty)
                     }
+
                     AuthError.InvalidEmail -> {
                         stringResource(id = R.string.not_a_valid_email)
                     }
+
                     else -> ""
                 },
                 hint = stringResource(id = R.string.email_hint)
@@ -114,9 +123,11 @@ fun RegisterScreen(
                     AuthError.FieldEmpty -> {
                         stringResource(id = R.string.error_field_empty)
                     }
+
                     AuthError.InputTooShort -> {
                         stringResource(id = R.string.input_too_short, MIN_USERNAME_LENGTH)
                     }
+
                     else -> ""
                 },
                 hint = stringResource(id = R.string.username_hint)
@@ -135,12 +146,15 @@ fun RegisterScreen(
                     AuthError.FieldEmpty -> {
                         stringResource(id = R.string.error_field_empty)
                     }
+
                     AuthError.InputTooShort -> {
                         stringResource(id = R.string.input_too_short, MIN_PASSWORD_LENGTH)
                     }
+
                     AuthError.InvalidPassword -> {
                         stringResource(id = R.string.invalid_password)
                     }
+
                     else -> ""
                 },
                 showPasswordVisible = passwordState.isPasswordVisible,
@@ -163,7 +177,9 @@ fun RegisterScreen(
                 )
             }
             if (registerState.isLoading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.align(CenterHorizontally)
+                )
             }
         }
 
