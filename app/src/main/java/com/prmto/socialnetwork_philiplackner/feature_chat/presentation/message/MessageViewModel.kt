@@ -67,6 +67,7 @@ class MessageViewModel @Inject constructor(
     )
 
     init {
+        chatUseCases.initializeRepository()
         loadNextMessages()
         observeChatEvents()
         observeChatMessages()
@@ -80,7 +81,7 @@ class MessageViewModel @Inject constructor(
 
     private fun observeChatMessages() {
         viewModelScope.launch {
-            chatUseCases.observeMessages().collect{ message ->
+            chatUseCases.observeMessages().collect { message ->
                 pagingState.value = pagingState.value.copy(
                     items = pagingState.value.items + message
                 )
@@ -96,7 +97,8 @@ class MessageViewModel @Inject constructor(
                         println("Connection was opened")
                         observeChatMessages()
                     }
-                    is WebSocket.Event.OnConnectionFailed ->{
+
+                    is WebSocket.Event.OnConnectionFailed -> {
                         println("Connection failed: ${event.throwable}")
                     }
                 }

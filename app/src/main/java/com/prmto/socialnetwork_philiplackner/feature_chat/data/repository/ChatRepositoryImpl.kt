@@ -6,21 +6,30 @@ import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.ChatApi
 import com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.ChatService
 import com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.model.WSClientMessage
+import com.prmto.socialnetwork_philiplackner.feature_chat.di.ScarletInstance
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Chat
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Message
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.repository.ChatRepository
 import com.tinder.scarlet.WebSocket
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import okhttp3.OkHttpClient
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
     private val chatApi: ChatApi,
-    private val chatService: ChatService,
+    private val okHttpClient: OkHttpClient
 ) : ChatRepository {
+
+    private var chatService: ChatService? = null
+
+    override fun initiliaze() {
+        chatService = ScarletInstance.getNewInstance(okHttpClient)
+    }
 
     override suspend fun getChatsForUser(): Resource<List<Chat>> {
         return try {
@@ -62,15 +71,22 @@ class ChatRepositoryImpl @Inject constructor(
 
 
     override fun observeChatEvents(): Flow<WebSocket.Event> {
-        return chatService.observeEvents().receiveAsFlow()
+        return chatService
+            ?.observeEvents()
+            ?.receiveAsFlow()
+            ?: flow { }
     }
 
     override fun observeMessages(): Flow<Message> {
-        return chatService.observeMessages().receiveAsFlow().map { it.toMessage() }
+        return chatService
+            ?.observeMessages()
+            ?.receiveAsFlow()
+            ?.map { it.toMessage() }
+            ?: flow { }
     }
 
     override fun sendMessage(toId: String, text: String, chatId: String?) {
-        chatService.sendMessage(
+        chatService?.sendMessage(
             message = WSClientMessage(
                 toId = toId,
                 text = text,

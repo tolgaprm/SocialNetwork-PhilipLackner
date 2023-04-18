@@ -29,22 +29,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ChatModule {
 
-
-    @Provides
-    fun provideScarlet(application: Application,okHttpClient: OkHttpClient, gson: Gson): Scarlet {
-        return Scarlet.Builder()
-            .addMessageAdapterFactory(CustomGsonMessageAdapter.Factory(gson))
-            .addStreamAdapterFactory(CoroutinesStreamAdapterFactory())
-            .webSocketFactory(okHttpClient.newWebSocketFactory("ws://192.168.1.20:8001/api/chat/websocket"))
-            .backoffStrategy(LinearBackoffStrategy(Constants.RECONNECT_INTERVAL))
-            .build()
-    }
-
-    @Provides
-    fun provideChatService(scarlet: Scarlet): ChatService {
-        return scarlet.create()
-    }
-
     @Provides
     @Singleton
     fun provideChatApi(
@@ -60,12 +44,12 @@ object ChatModule {
 
     @Provides
     fun provideChatRepository(
-        chatService: ChatService,
+        okHttpClient: OkHttpClient,
         chatApi: ChatApi,
     ): ChatRepository {
         return ChatRepositoryImpl(
-            chatApi = chatApi,
-            chatService = chatService
+            okHttpClient = okHttpClient,
+            chatApi = chatApi
         )
     }
 
@@ -78,7 +62,8 @@ object ChatModule {
             observeChatEvents = ObserveChatEvents(chatRepository),
             observeMessages = ObserveMessages(chatRepository),
             getChatForUser = GetChatForUser(chatRepository),
-            getMessagesForChat = GetMessagesForChat(chatRepository)
+            getMessagesForChat = GetMessagesForChat(chatRepository),
+            initializeRepository = InitializeRepository(chatRepository)
         )
     }
 }

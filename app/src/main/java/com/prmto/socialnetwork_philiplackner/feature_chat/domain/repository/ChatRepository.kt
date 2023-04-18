@@ -7,6 +7,8 @@ import com.tinder.scarlet.WebSocket
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
+
+    fun initiliaze()
     suspend fun getChatsForUser(): Resource<List<Chat>>
 
     suspend fun getMessagesForChat(
