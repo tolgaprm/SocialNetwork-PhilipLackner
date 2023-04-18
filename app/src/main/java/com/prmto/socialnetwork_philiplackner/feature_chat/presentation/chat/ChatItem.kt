@@ -22,6 +22,9 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.ProfileP
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceMedium
 import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSmall
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Chat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.Locale
 
 @ExperimentalMaterialApi
 @ExperimentalCoilApi
@@ -78,8 +81,11 @@ fun ChatItem(
                         modifier = Modifier.weight(1f)
                     )
                     Spacer(modifier = Modifier.width(SpaceSmall))
-                    Text(text = item.timestamp.toString())
+                    Text(
+                        text = SimpleDateFormat("MMM dd, HH:mm", Locale.getDefault()).format(item.timestamp),
+                    )
                 }
+                
                 Spacer(modifier = Modifier.height(SpaceSmall))
                 Text(
                     text = item.lastMessage,
