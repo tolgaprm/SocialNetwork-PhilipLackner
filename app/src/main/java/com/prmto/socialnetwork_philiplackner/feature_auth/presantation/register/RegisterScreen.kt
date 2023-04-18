@@ -37,8 +37,8 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    onPopStack: () -> Unit = {},
     scaffoldState: ScaffoldState,
+    onPopStack: () -> Unit = {},
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
 
@@ -50,6 +50,12 @@ fun RegisterScreen(
     val context = LocalContext.current
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(key1 = true) {
+        viewModel.onRegister.collect {
+            onPopStack()
+        }
+    }
 
     LaunchedEffect(key1 = keyboardController) {
         viewModel.eventFlow.collectLatest { event ->
