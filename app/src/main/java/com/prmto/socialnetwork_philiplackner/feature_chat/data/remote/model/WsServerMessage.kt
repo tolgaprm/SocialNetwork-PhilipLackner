@@ -2,6 +2,7 @@ package com.prmto.socialnetwork_philiplackner.feature_chat.data.remote.model
 
 import com.prmto.socialnetwork_philiplackner.feature_chat.domain.model.Message
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -17,9 +18,8 @@ data class WsServerMessage(
             fromId = fromId,
             toId = toId,
             text = text,
-            formattedTime = DateFormat
-                .getDateInstance(DateFormat.DEFAULT)
-                .format(Date(timestamp)),
+            formattedTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                .format(timestamp),
             chatId = chatId,
         )
     }
