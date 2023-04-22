@@ -41,6 +41,7 @@ import com.prmto.socialnetwork_philiplackner.core.presentation.ui.theme.SpaceSma
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.asString
 import com.prmto.socialnetwork_philiplackner.core.util.Screen
+import com.prmto.socialnetwork_philiplackner.core.util.openUrlInBrowser
 import com.prmto.socialnetwork_philiplackner.core.util.sendSharePostIntent
 import com.prmto.socialnetwork_philiplackner.core.util.toPx
 import com.prmto.socialnetwork_philiplackner.feature_profile.presantation.profile.components.BannerSection
@@ -228,7 +229,16 @@ fun ProfileScreen(
                     topSkills = profile.topSkills,
                     shouldShowGitHub = !profile.gitHubUrl.isNullOrBlank(),
                     shouldShowInstagram = !profile.instagramUrl.isNullOrBlank(),
-                    shouldShowLinkedInUrl = !profile.linkedInUrl.isNullOrBlank()
+                    shouldShowLinkedInUrl = !profile.linkedInUrl.isNullOrBlank(),
+                    onGitHubClick = {
+                        context.openUrlInBrowser(profile.gitHubUrl ?: return@BannerSection)
+                    },
+                    onInstagramClick = {
+                        context.openUrlInBrowser(profile.instagramUrl ?: return@BannerSection)
+                    },
+                    onLinkedInClick = {
+                        context.openUrlInBrowser(profile.linkedInUrl ?: return@BannerSection)
+                    }
                 )
 
                 AsyncImage(
