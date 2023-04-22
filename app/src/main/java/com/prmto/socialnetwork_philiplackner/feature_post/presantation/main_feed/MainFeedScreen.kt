@@ -97,6 +97,9 @@ fun MainFeedScreen(
                         onShareClick = {
                             context.sendSharePostIntent(postId = post.id)
                         },
+                        onDeleteClick = {
+                            viewModel.onEvent(MainFeedEvent.DeletePost(post.id))
+                        },
                         showProfileImage = false
                     )
                 }

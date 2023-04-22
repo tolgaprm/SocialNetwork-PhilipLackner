@@ -7,4 +7,6 @@ sealed class ProfileEvent {
     object ShowLogoutDialog : ProfileEvent()
 
     object Logout : ProfileEvent()
+
+    data class DeletePost(val postId: String) : ProfileEvent()
 }

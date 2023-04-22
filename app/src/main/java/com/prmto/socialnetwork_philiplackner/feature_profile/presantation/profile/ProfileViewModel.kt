@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.domain.usecase.GetOwnUserIdUseCase
 import com.prmto.socialnetwork_philiplackner.core.presentation.PagingState
@@ -63,18 +64,46 @@ class ProfileViewModel @Inject constructor(
             is ProfileEvent.LikedPost -> {
                 toggleLikeForParent(parentId = event.postId)
             }
+
             is ProfileEvent.DismissLogoutDialog -> {
                 _state.value = _state.value.copy(
                     isLogoutDialogVisible = false
                 )
             }
+
             is ProfileEvent.ShowLogoutDialog -> {
                 _state.value = _state.value.copy(
                     isLogoutDialogVisible = true
                 )
             }
+
             is ProfileEvent.Logout -> {
                 profileUseCases.logoutUseCase()
+            }
+
+            is ProfileEvent.DeletePost -> {
+                deletePost(event.postId)
+            }
+        }
+    }
+
+    private fun deletePost(postId: String) {
+        viewModelScope.launch {
+            when (val result = postUseCases.deletePostUseCase(postId)) {
+                is Resource.Success -> {
+                    _pagingState.value = pagingState.value.copy(
+                        items = pagingState.value.items.filter { it.id != postId }
+                    )
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            UiText.StringResource(R.string.successfuly_deleted_post)
+                        )
+                    )
+                }
+
+                is Resource.Error -> {
+                    _eventFlow.emit(UiEvent.ShowSnackbar(result.uiText ?: UiText.unknownError()))
+                }
             }
         }
     }
@@ -131,6 +160,7 @@ class ProfileViewModel @Inject constructor(
                         isLoading = false, profile = result.data
                     )
                 }
+
                 is Resource.Error -> {
                     _state.value = _state.value.copy(isLoading = false)
                     _eventFlow.emit(

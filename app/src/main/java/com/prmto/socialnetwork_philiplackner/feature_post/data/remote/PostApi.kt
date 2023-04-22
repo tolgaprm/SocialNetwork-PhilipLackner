@@ -64,7 +64,12 @@ interface PostApi {
 
     ):List<UserItemDto>
 
+    @DELETE("/api/post/delete")
+    suspend fun deletePost(
+        @Query("postId") postId: String
+    )
+
     companion object {
-        val BASE_URL = "http://10.0.2.2:8001"
+        val BASE_URL = "http://10.0.2.2:8002"
     }
 }

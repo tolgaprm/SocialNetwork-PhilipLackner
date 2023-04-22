@@ -69,8 +69,12 @@ class PersonListViewModel @Inject constructor(
                     isFollowing = event.isFollowing
                 )
             }
+
         }
+
     }
+
+
 
     private fun toggleFollowStateForUser(userId: String, isFollowing: Boolean) {
         viewModelScope.launch {

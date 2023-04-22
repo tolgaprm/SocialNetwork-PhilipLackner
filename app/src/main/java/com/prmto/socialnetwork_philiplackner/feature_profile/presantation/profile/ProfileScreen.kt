@@ -156,7 +156,10 @@ fun ProfileScreen(
                             viewModel.onEvent(ProfileEvent.ShowLogoutDialog)
                         },
                         onMessageClick = {
-                            val encodedProfilePictureUrl = Base64.encodeToString(profile.profilePictureUrl.encodeToByteArray(), 0)
+                            val encodedProfilePictureUrl = Base64.encodeToString(
+                                profile.profilePictureUrl.encodeToByteArray(),
+                                0
+                            )
                             onNavigate(
                                 Screen.MessagesScreen.route + "/${profile.userId}/${profile.username}/$encodedProfilePictureUrl"
                             )
@@ -185,6 +188,9 @@ fun ProfileScreen(
                     },
                     onShareClick = {
                         context.sendSharePostIntent(postId = post.id)
+                    },
+                    onDeleteClick = {
+                        viewModel.onEvent(ProfileEvent.DeletePost(post.id))
                     },
                     showProfileImage = false
                 )

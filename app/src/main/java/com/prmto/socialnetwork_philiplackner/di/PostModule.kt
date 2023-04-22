@@ -47,7 +47,8 @@ object PostModule {
             getCommentsForPost = GetCommentsForPostUseCase(repository),
             createComment = CreateCommentUseCase(repository),
             toggleLikeForParent = ToggleLikeForParentUseCase(repository),
-            getLikesForParentUseCase = GetLikesForParentUseCase(repository)
+            getLikesForParentUseCase = GetLikesForParentUseCase(repository),
+            deletePostUseCase = DeletePostUseCase(repository)
         )
     }
 }

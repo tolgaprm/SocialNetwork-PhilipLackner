@@ -43,6 +43,6 @@ interface ProfileApi {
     ): BasicApiResponse<Unit>
 
     companion object {
-        val BASE_URL = "http://10.0.2.2:8001"
+        val BASE_URL = "http://10.0.2.2:8002"
     }
 }

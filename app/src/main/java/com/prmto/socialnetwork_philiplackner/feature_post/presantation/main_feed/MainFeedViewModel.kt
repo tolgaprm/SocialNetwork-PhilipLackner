@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.prmto.socialnetwork_philiplackner.R
 import com.prmto.socialnetwork_philiplackner.core.domain.models.Post
 import com.prmto.socialnetwork_philiplackner.core.presentation.PagingState
 import com.prmto.socialnetwork_philiplackner.core.presentation.util.UiEvent
@@ -11,6 +12,8 @@ import com.prmto.socialnetwork_philiplackner.core.util.DefaultPaginator
 import com.prmto.socialnetwork_philiplackner.core.util.Event
 import com.prmto.socialnetwork_philiplackner.core.util.ParentType
 import com.prmto.socialnetwork_philiplackner.core.util.PostLiker
+import com.prmto.socialnetwork_philiplackner.core.util.Resource
+import com.prmto.socialnetwork_philiplackner.core.util.UiText
 import com.prmto.socialnetwork_philiplackner.feature_post.domain.use_case.PostUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -66,6 +69,30 @@ class MainFeedViewModel @Inject constructor(
                 )
             }
 
+            is MainFeedEvent.DeletePost -> {
+                deletePost(postId = event.postId)
+            }
+        }
+    }
+
+    private fun deletePost(postId: String) {
+        viewModelScope.launch {
+            when (val result = postUseCases.deletePostUseCase(postId)) {
+                is Resource.Success -> {
+                    _pagingState.value = pagingState.value.copy(
+                        items = pagingState.value.items.filter { it.id != postId }
+                    )
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            UiText.StringResource(R.string.successfuly_deleted_post)
+                        )
+                    )
+                }
+
+                is Resource.Error -> {
+                    _eventFlow.emit(UiEvent.ShowSnackbar(result.uiText ?: UiText.unknownError()))
+                }
+            }
         }
     }
 

@@ -30,7 +30,7 @@ class PostRepositoryImpl @Inject constructor(
         return try {
             val posts = postApi.getPostsForFollows(
                 page = page,
-                pageSize=pageSize
+                pageSize = pageSize
             )
             Resource.Success(data = posts)
         } catch (e: IOException) {
@@ -214,4 +214,21 @@ class PostRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun deletePost(postId: String): SimpleResource {
+        return try {
+            postApi.deletePost(postId = postId)
+            Resource.Success(Unit)
+        } catch (e: IOException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.error_couldnt_reach_server)
+            )
+        } catch (e: HttpException) {
+            Resource.Error(
+                uiText = UiText.StringResource(R.string.oops_someting_went_wrong)
+            )
+        }
+    }
+
+
 }
